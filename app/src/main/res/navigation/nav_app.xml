@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_app"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="gcubeit.com.enerwireproduccionv12.ui.dashboard.DashboardFragment"
+        android:label="dashboard_fragment"
+        tools:layout="@layout/dashboard_fragment" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_stopsFragment"
+            app:destination="@id/stopsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stopsFragment"
+        android:name="gcubeit.com.enerwireproduccionv12.ui.stops.StopsFragment"
+        android:label="stops_fragment"
+        tools:layout="@layout/stops_fragment" >
+        <action
+            android:id="@+id/action_stopsFragment_to_createFragment"
+            app:destination="@id/createFragment" />
+        <action
+            android:id="@+id/action_stopsFragment_to_editFragment"
+            app:destination="@id/editFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createFragment"
+        android:name="gcubeit.com.enerwireproduccionv12.ui.create.CreateFragment"
+        android:label="create_fragment"
+        tools:layout="@layout/create_fragment" >
+        <action
+            android:id="@+id/action_createFragment_to_confirmFragment"
+            app:destination="@id/confirmFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editFragment"
+        android:name="gcubeit.com.enerwireproduccionv12.ui.edit.EditFragment"
+        android:label="edit_fragment"
+        tools:layout="@layout/edit_fragment" >
+        <action
+            android:id="@+id/action_editFragment_to_confirmFragment"
+            app:destination="@id/confirmFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmFragment"
+        android:name="gcubeit.com.enerwireproduccionv12.ui.confirm.ConfirmFragment"
+        android:label="confirm_fragment"
+        tools:layout="@layout/confirm_fragment" >
+        <action
+            android:id="@+id/action_confirmFragment_to_stopsFragment"
+            app:destination="@id/stopsFragment" />
+    </fragment>
+</navigation>

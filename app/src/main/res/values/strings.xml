@@ -1,0 +1,149 @@
+<resources>
+    <string name="app_name">Enerwire Produccion</string>
+    <string name="hint_etUsername">Usuario</string>
+    <string name="hint_etPassword">Password</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="label_login">LOGIN</string>
+    <string name="label_user">Usuario</string>
+    <string name="label_password">Password</string>
+    <string name="btn_login">Ingresar</string>
+    <string name="label_welcome">Bienvenido</string>
+    <string name="btn_create_appointment">Ingresar Paro</string>
+    <string name="btn_my_appointments">Ver Paros</string>
+    <string name="btn_logout">Cerrar Sesión</string>
+    <string name="label_create_stop">Ingresar Paro</string>
+    <string name="label_code">Codigo de Paro</string>
+    <string name="label_stop_type">Tipo de Paro</string>
+    <string name="label_machine">Maquina</string>
+    <string name="label_product">Producto</string>
+    <string name="label_color">Color</string>
+    <string name="label_meters">Metros Producidos</string>
+    <string name="label_comments">Observaciones</string>
+    <string name="btn_next">Siguiente</string>
+    <string name="label_confirm_stop_data">Resumen de Paro</string>
+    <string name="label_start_datetime_stop">Fecha de Inicio</string>
+    <string name="label_end_datetime_stop">Fecha de Fin</string>
+    <string name="btn_confirm">Confirmar</string>
+    <string name="press_back_again">Presione una vez mas para salir</string>
+    <string name="error_loading_codes">Ocurrio un error al cargar los codigos de paro</string>
+    <string name="dialog_create_stop_exit_title">Estas seguro que deseas salir?</string>
+    <string name="dialog_create_stop_exit_message">Si abandonas el registro, los datos que habias ingresado se perderan.</string>
+    <string name="dialog_create_stop_exit_positive_btn">Si, salir</string>
+    <string name="dialog_create_stop_exit_negative_btn">Continuar Registro</string>
+    <string name="error_loading_machines">Ocurrio un error al cargar las Maquinas</string>
+    <string name="error_loading_products">Ocurrio un error al cargar los Productos</string>
+    <string name="error_loading_colors">Ocurrio un error al cargar los Colores</string>
+    <string name="error_login_response">Se obtuvo una respuesta inesperada del servidor</string>
+    <string name="error_invalid_credentials">Las credenciales son invalidas</string>
+    <string name="error_empty_credentials">Por favor ingrese un usuario y contraseña</string>
+    <string name="welcome_name">Bienvenido %1$s</string>
+    <string name="label_my_stops">Mis Paros</string>
+    <string name="item_stop_id">Numero de Paro #%1$d</string>
+    <string name="item_stop_description">%1$d - %2$s</string>
+    <string name="item_stop_date_start">Inicio el dia %1$s</string>
+    <string name="item_stop_time_start">A las %1$s</string>
+    <string name="item_stop_date_end">Finalizo el dia %1$s</string>
+    <string name="item_stop_time_end">A las %1$s</string>
+    <string name="create_stop_success">Paro Registrado Correctamente</string>
+    <string name="create_stop_error">Ocurrio un error inesperado registrando el paro</string>
+    <string name="spinner_title_code">Seleccionar Codigo de Paro</string>
+    <string name="spinner_title_machine">Seleccionar Maquina</string>
+    <string name="spinner_title_product">Seleccionar Producto</string>
+    <string name="spinner_title_color">Seleccionar Color</string>
+    <string name="require_code_text">Es necesario seleccionar el Codigo de Paro</string>
+    <string name="require_machine_text">Es necesario selecionar la Maquina</string>
+    <string name="require_product_text">Es necesario seleccionar el Producto</string>
+    <string name="require_color_text">Es necesario seleccionar el Color</string>
+    <string name="require_comment_text">Es necesario ingresar un Comentario</string>
+    <string name="logo_image_description">Logo</string>
+
+    <string name="date_stop_grid">%1$s/%2$s/%3$s</string>
+    <string name="date_stop">%1$s %2$s %3$s</string>
+    <string name="time_stop_am">%1$s a.m.</string>
+    <string name="time_stop_pm">%1$s p.m.</string>
+
+    <string name="menu_appbar_search_title">Buscar</string>
+    <string name="menu_appbar_profile_title">Mi Perfil</string>
+    <string name="menu_appbar_settings_title">Configuración</string>
+    <string name="menu_appbar_help_title">Ayuda</string>
+    <string name="menu_appbar_logout_title">Cerrar Sesión</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="grid_date_column">Fecha</string>
+    <string name="grid_schedule_column">Turno</string>
+    <string name="grid_operator_column">Operadores</string>
+    <string name="grid_start_stop_column">Inicio Paro</string>
+    <string name="grid_end_stop_column">Fin Paro</string>
+    <string name="grid_product_column">Producto</string>
+    <string name="grid_code_column">Codigo de Paro</string>
+    <string name="grid_packing_column">Empaque</string>
+    <string name="grid_quantity_column">Cantidad</string>
+    <string name="grid_meters_column">Metros Producidos</string>
+    <string name="grid_comment_column">Observaciones</string>
+
+    <!-- TableView Strings -->
+    <string name="sort_ascending">Sort Ascending</string>
+    <string name="sort_descending">Sort Descending</string>
+    <string name="hiding_row_sample">Hiding 3. Row Sample</string>
+    <string name="showing_row_sample">Showing 3. Row Sample</string>
+    <string name="scroll_to_column_position">Scroll to 15. column position</string>
+    <string name="scroll_to_row_position">Scroll to 5. row position</string>
+    <string name="show_hide_the_column">Showing / Hiding 1. column</string>
+    <string name="table_pagination_details">Page %s, showing items %s - %s.</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="btn_back">Atras</string>
+    <string name="label_conversion">Empaque</string>
+    <string name="spinner_title_conversion">Seleccionar el Empaque</string>
+    <string name="label_quantity">Cantidad</string>
+    <string name="error_loading_conversions">Ocurrio un error al cargar las Conversiones</string>
+    <string name="label_operator">Operador</string>
+    <string name="spinner_title_operator">Seleccione Operador</string>
+    <string name="error_loading_operators">Ocurrio un error al cargar los Operadores</string>
+    <string name="hint_select_color">Selecionar Color</string>
+    <string name="hint_select_operator">Seleccionar Operador</string>
+    <string name="hint_select_code">Seleccionar Codigo</string>
+    <string name="hint_select_conversion">Seleccionar Empaque</string>
+    <string name="require_operator_text">Es necesario seleccionar el Operador</string>
+    <string name="require_conversion_text">Es necesario seleccionar el Empaque</string>
+    <string name="require_quantity_text">Es necesario ingresar la cantidad</string>
+    <string name="spinner_icon_color_image_description">icon color</string>
+    <string name="update_stop_success">Paro Actualizado Satisfactoriamente</string>
+    <string name="update_stop_error">Ocurrio un error al actualizar el paro</string>
+    <string name="grid_actions_column">Acciones</string>
+    <string name="refresh">Actualizar</string>
+    <string name="fat_desc_add_stop">Agregar Paro</string>
+    <string name="button_edit">Boton Edit</string>
+    <string name="button_delete">Boton Eliminar</string>
+    <string name="edit_fragment_text">Edit Fragment</string>
+    <string name="lbl_button_save">Guardar</string>
+    <string name="confirm_fragment_text">Confirm Fragment</string>
+    <string name="lbl_button_ok">Aceptar</string>
+    <string name="home_fragment_text">Home Fragment</string>
+    <string name="lbl_btn_stops">Paros</string>
+    <string name="stops_fragment_text">Stops Fragment</string>
+    <string name="lbl_btn_create">Crear</string>
+    <string name="lbl_btn_edit">Editar</string>
+
+    <string-array name="animes">
+        <item>Black Jack</item>
+        <item>Naruto Shippuden</item>
+        <item>Dragonball</item>
+        <item>Pokemon</item>
+        <item>Digimon</item>
+        <item>Samurai X</item>
+        <item>Bersek</item>
+    </string-array>
+
+    <string-array name="codes">
+        <item>0 - Maquina trabajando normalmente</item>
+        <item>1 - Preparacion de maquina</item>
+        <item>2 - Cambio de Carrete</item>
+        <item>3 - Comida</item>
+    </string-array>
+
+    <string-array name="operators">
+        <item>MARCO GARCIA</item>
+        <item>JUAN PEREZ</item>
+        <item>MATEO ALAS</item>
+        <item>JORGE MONZON</item>
+    </string-array>
+</resources>
