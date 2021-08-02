@@ -1,28 +1,22 @@
 package gcubeit.com.enerwireproduccionv12.ui.home
 
-import android.content.Context
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import gcubeit.com.enerwireproduccionv12.R
-import gcubeit.com.enerwireproduccionv12.data.AppApiService
-import gcubeit.com.enerwireproduccionv12.data.repository.HomeRepository
-import gcubeit.com.enerwireproduccionv12.data.repository.LoginRepository
 import gcubeit.com.enerwireproduccionv12.databinding.HomeFragmentBinding
 import gcubeit.com.enerwireproduccionv12.ui.base.BaseFragment
-import gcubeit.com.enerwireproduccionv12.ui.login.LoginViewModelFactory
+import kotlinx.coroutines.launch
+import org.kodein.di.generic.instance
 
 class HomeFragment : BaseFragment<HomeViewModel>() {
-
-//    companion object {
-//        fun newInstance() = HomeFragment()
-//    }
-
-    //private lateinit var viewModel: HomeViewModel
-    private lateinit var factory: HomeViewModelFactory
+    private val homeViewModelFactory: HomeViewModelFactory by instance()
     private lateinit var binding: HomeFragmentBinding
 
     override fun onCreateView(
@@ -44,13 +38,48 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
             }
         }
 
+        binding.bottomNavView.setOnNavigationItemSelectedListener { menuItem ->
+            when(menuItem.itemId){
+                else -> {
+                    //val machineId = bundleOf(menuItem.id of machine_id)
+                    true
+                }
+            }
+        }
+
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        factory = HomeViewModelFactory(HomeRepository())
-        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
-        // TODO: Use the ViewModel
+        setHasOptionsMenu(true)
+
+        viewModel = ViewModelProvider(this, homeViewModelFactory)
+            .get(HomeViewModel::class.java)
+
+        bindUI()
+    }
+
+    private fun bindUI() = launch {
+        val menu = binding.bottomNavView.menu
+
+        val currentMachines = viewModel.machines.await()
+        currentMachines.observe(viewLifecycleOwner, Observer {
+            menu.clear()
+            if(it.size >= 5) {
+                Toast.makeText(requireContext(), "Ha excedido la cantidad de maquinas asignadas, consulte a su Administrador", Toast.LENGTH_SHORT).show()
+            } else {
+                it.forEach {
+                    with(menu) {
+                        add(
+                            Menu.NONE,
+                            it.id,
+                            Menu.NONE,
+                            it.machineName
+                        ).setIcon(R.drawable.ic_machine)
+                    }
+                }
+            }
+        })
     }
 }

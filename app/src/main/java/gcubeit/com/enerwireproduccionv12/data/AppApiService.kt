@@ -3,14 +3,14 @@ package gcubeit.com.enerwireproduccionv12.data
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptor
 import gcubeit.com.enerwireproduccionv12.data.network.response.LoginResponse
+import gcubeit.com.enerwireproduccionv12.data.network.response.MachinesResponse
+import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface AppApiService {
     @FormUrlEncoded
@@ -22,6 +22,11 @@ interface AppApiService {
 
     @POST("logout")
     suspend fun logout(): ResponseBody
+
+    @GET("dev_machines")
+    fun getMachines(
+        @Query("serialNumber") serial: String
+    ): Deferred<MachinesResponse>
 
     companion object {
         private const val BASE_URL = "http://134.122.113.150/api/"
