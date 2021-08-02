@@ -1,7 +1,31 @@
 package gcubeit.com.enerwireproduccionv12.ui.login
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import gcubeit.com.enerwireproduccionv12.data.Resource
+import gcubeit.com.enerwireproduccionv12.data.network.response.LoginResponse
+import gcubeit.com.enerwireproduccionv12.data.repository.LoginRepository
+import gcubeit.com.enerwireproduccionv12.ui.base.BaseViewModel
+import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class LoginViewModel(
+    private val repository: LoginRepository
+) : BaseViewModel(repository) {
+    private val _loginResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
+    val loginResponse: LiveData<Resource<LoginResponse>>
+        get() = _loginResponse
+
+    fun login(
+        username: String,
+        password: String
+    ) = viewModelScope.launch {
+        _loginResponse.value = Resource.Loading
+        _loginResponse.value = repository.login(username, password)
+    }
+
+    suspend fun saveAuthToken(token: String) {
+        repository.saveAuthToken(token)
+    }
 }
