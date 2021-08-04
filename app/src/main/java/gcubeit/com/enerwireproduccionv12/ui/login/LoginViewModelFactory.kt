@@ -2,7 +2,7 @@ package gcubeit.com.enerwireproduccionv12.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import gcubeit.com.enerwireproduccionv12.data.repository.LoginRepository
+import gcubeit.com.enerwireproduccionv12.data.repository.login.LoginRepository
 
 class LoginViewModelFactory(
     private val loginRepository: LoginRepository

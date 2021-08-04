@@ -2,8 +2,13 @@ package gcubeit.com.enerwireproduccionv12.data
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptor
-import gcubeit.com.enerwireproduccionv12.data.network.response.LoginResponse
-import gcubeit.com.enerwireproduccionv12.data.network.response.MachinesResponse
+import gcubeit.com.enerwireproduccionv12.data.network.response.login.LoginResponse
+import gcubeit.com.enerwireproduccionv12.data.network.response.code.CodesResponse
+import gcubeit.com.enerwireproduccionv12.data.network.response.color.ColorsResponse
+import gcubeit.com.enerwireproduccionv12.data.network.response.conversion.ConversionsResponse
+import gcubeit.com.enerwireproduccionv12.data.network.response.machine.MachinesResponse
+import gcubeit.com.enerwireproduccionv12.data.network.response.operator.OperatorsResponse
+import gcubeit.com.enerwireproduccionv12.data.network.response.product.ProductsResponse
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -27,6 +32,21 @@ interface AppApiService {
     fun getMachines(
         @Query("serialNumber") serial: String
     ): Deferred<MachinesResponse>
+
+    @GET("codes")
+    fun getCodes(): Deferred<CodesResponse>
+
+    @GET("products")
+    fun getProducts(): Deferred<ProductsResponse>
+
+    @GET("operators")
+    fun getOperators(): Deferred<OperatorsResponse>
+
+    @GET("colors")
+    fun getColors(): Deferred<ColorsResponse>
+
+    @GET("conversions")
+    fun getConversions(): Deferred<ConversionsResponse>
 
     companion object {
         private const val BASE_URL = "http://134.122.113.150/api/"

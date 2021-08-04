@@ -1,37 +1,58 @@
 package gcubeit.com.enerwireproduccionv12.ui.dashboard
 
-import android.content.Context
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import gcubeit.com.enerwireproduccionv12.R
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import gcubeit.com.enerwireproduccionv12.databinding.DashboardFragmentBinding
+import gcubeit.com.enerwireproduccionv12.ui.base.BaseFragment
+import kotlinx.coroutines.launch
+import org.kodein.di.generic.instance
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : BaseFragment<DashboardViewModel>() {
+    companion object {
+        fun newInstance() = DashboardFragment()
+    }
 
-//    companion object {
-//        fun newInstance() = DashboardFragment()
-//    }
-
-    private lateinit var viewModel: DashboardViewModel
+    private val dashboardViewModelFactory: DashboardViewModelFactory by instance()
+    private lateinit var binding: DashboardFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.dashboard_fragment, container, false)
+    ): View {
+        binding = DashboardFragmentBinding.inflate(inflater, container, false)
+
+//        binding.btnStops.setOnClickListener {
+//            findNavController().navigate(R.id.action_dashboardFragment_to_stopsFragment)
+//        }
+
+        return binding.root
     }
 
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindUI()
+    }
+
+    private fun bindUI() = launch {
+        val data = viewModel.data.await()
+        data.observe(viewLifecycleOwner, Observer{
+            binding.tvTitle.text = it.toString()
+        })
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this, dashboardViewModelFactory)
+            .get(DashboardViewModel::class.java)
+        // TODO: Use the ViewModel
+    }
+
+//    override fun onAttach(context: Context) {
+//        super.onAttach(context)
 //        viewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
-//        // TODO: Use the ViewModel
 //    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        viewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
-    }
 }

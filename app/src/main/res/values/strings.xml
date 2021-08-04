@@ -117,11 +117,12 @@
     <string name="lbl_button_save">Guardar</string>
     <string name="confirm_fragment_text">Confirm Fragment</string>
     <string name="lbl_button_ok">Aceptar</string>
-    <string name="home_fragment_text">Home Fragment</string>
+    <string name="dashboard_fragment_text">Dashboard Fragment</string>
     <string name="lbl_btn_stops">Paros</string>
     <string name="stops_fragment_text">Stops Fragment</string>
     <string name="lbl_btn_create">Crear</string>
     <string name="lbl_btn_edit">Editar</string>
+    <string name="database_name">enerwire.db</string>
 
     <string-array name="animes">
         <item>Black Jack</item>

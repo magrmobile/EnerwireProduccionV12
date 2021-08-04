@@ -1,4 +1,4 @@
-package gcubeit.com.enerwireproduccionv12.data.network.response
+package gcubeit.com.enerwireproduccionv12.data.network.response.login
 
 data class LoginResponse(
     val active_user: String,

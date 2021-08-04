@@ -1,7 +1,8 @@
-package gcubeit.com.enerwireproduccionv12.data.repository
+package gcubeit.com.enerwireproduccionv12.data.repository.login
 
 import gcubeit.com.enerwireproduccionv12.data.AppApiService
 import gcubeit.com.enerwireproduccionv12.data.database.UserPreferences
+import gcubeit.com.enerwireproduccionv12.data.repository.BaseRepository
 
 class LoginRepository(
     private val api: AppApiService,

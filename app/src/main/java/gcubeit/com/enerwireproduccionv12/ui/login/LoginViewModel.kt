@@ -2,11 +2,10 @@ package gcubeit.com.enerwireproduccionv12.ui.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import gcubeit.com.enerwireproduccionv12.data.Resource
-import gcubeit.com.enerwireproduccionv12.data.network.response.LoginResponse
-import gcubeit.com.enerwireproduccionv12.data.repository.LoginRepository
+import gcubeit.com.enerwireproduccionv12.data.network.response.login.LoginResponse
+import gcubeit.com.enerwireproduccionv12.data.repository.login.LoginRepository
 import gcubeit.com.enerwireproduccionv12.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 

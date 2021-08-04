@@ -3,7 +3,7 @@ package gcubeit.com.enerwireproduccionv12.data.database.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import gcubeit.com.enerwireproduccionv12.data.network.response.Machine
+import gcubeit.com.enerwireproduccionv12.data.network.response.machine.Machine
 
 @Entity(tableName = "machine_table")
 data class DbMachine(

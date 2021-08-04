@@ -1,12 +1,14 @@
 package gcubeit.com.enerwireproduccionv12.ui.home
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import gcubeit.com.enerwireproduccionv12.R
+import androidx.appcompat.app.AppCompatActivity
+import gcubeit.com.enerwireproduccionv12.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }

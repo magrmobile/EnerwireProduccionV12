@@ -1,13 +1,12 @@
 package gcubeit.com.enerwireproduccionv12.data.repository.home
 
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import gcubeit.com.enerwireproduccionv12.data.database.DbMachineDao
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbMachine
 import gcubeit.com.enerwireproduccionv12.data.network.datasource.machine.MachineNetworkDatasource
-import gcubeit.com.enerwireproduccionv12.data.network.response.MachinesResponse
-import gcubeit.com.enerwireproduccionv12.data.network.response.asDatabaseModel
+import gcubeit.com.enerwireproduccionv12.data.network.response.machine.MachinesResponse
+import gcubeit.com.enerwireproduccionv12.data.network.response.machine.asDatabaseModel
 import gcubeit.com.enerwireproduccionv12.data.repository.BaseRepository
 import gcubeit.com.enerwireproduccionv12.util.getIMEIDeviceId
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +39,7 @@ class HomeRepositoryImpl(
 
     private fun persistFetchedMachines(fetchedMachines: MachinesResponse){
         GlobalScope.launch(Dispatchers.IO) {
+            dbMachineDao.deleteAll()
             dbMachineDao.insertAll(fetchedMachines.machines.asDatabaseModel())
         }
     }

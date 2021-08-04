@@ -1,7 +1,7 @@
 package gcubeit.com.enerwireproduccionv12
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import gcubeit.com.enerwireproduccionv12.data.database.UserPreferences

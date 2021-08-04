@@ -9,10 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import gcubeit.com.enerwireproduccionv12.data.AppApiService
 import gcubeit.com.enerwireproduccionv12.data.Resource
-import gcubeit.com.enerwireproduccionv12.data.database.UserPreferences
-import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptor
-import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptorImpl
-import gcubeit.com.enerwireproduccionv12.data.repository.LoginRepository
+import gcubeit.com.enerwireproduccionv12.data.repository.login.LoginRepository
 import gcubeit.com.enerwireproduccionv12.databinding.LoginFragmentBinding
 import gcubeit.com.enerwireproduccionv12.ui.base.BaseFragment
 import gcubeit.com.enerwireproduccionv12.ui.home.HomeActivity

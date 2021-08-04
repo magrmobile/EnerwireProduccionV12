@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import gcubeit.com.enerwireproduccionv12.data.AppApiService
-import gcubeit.com.enerwireproduccionv12.data.network.response.MachinesResponse
+import gcubeit.com.enerwireproduccionv12.data.network.response.machine.MachinesResponse
 import gcubeit.com.enerwireproduccionv12.util.NoConnectivityException
 
 class MachineNetworkDatasourceImpl(

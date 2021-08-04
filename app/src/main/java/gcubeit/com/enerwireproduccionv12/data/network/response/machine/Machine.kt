@@ -1,4 +1,4 @@
-package gcubeit.com.enerwireproduccionv12.data.network.response
+package gcubeit.com.enerwireproduccionv12.data.network.response.machine
 
 
 import com.google.gson.annotations.SerializedName
