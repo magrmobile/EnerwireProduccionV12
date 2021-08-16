@@ -1,5 +1,6 @@
 package gcubeit.com.enerwireproduccionv12.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -46,7 +47,7 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
 
         bindUI()
 
-        binding.bottomNavView.setOnNavigationItemSelectedListener { menuItem ->
+        binding.bottomNavView.setOnItemSelectedListener { menuItem ->
             when(menuItem.itemId){
                 0 -> {
                     val fragment = DashboardFragment.newInstance()

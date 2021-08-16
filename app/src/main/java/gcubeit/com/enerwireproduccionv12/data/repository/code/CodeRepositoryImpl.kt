@@ -31,10 +31,10 @@ class CodeRepositoryImpl(
         }
     }
 
-    private fun persistFetchedCodes(fetchedCodes: CodesResponse){
+    private fun persistFetchedCodes(fetchedCodes: List<DbCode>){
         GlobalScope.launch(Dispatchers.IO) {
             //dbCodeDao.deleteAll()
-            dbCodeDao.insertAll(fetchedCodes.codes.asDatabaseModel())
+            dbCodeDao.insertAll(fetchedCodes)
         }
     }
 

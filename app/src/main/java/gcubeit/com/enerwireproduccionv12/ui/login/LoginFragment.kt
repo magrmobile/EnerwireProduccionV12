@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -57,10 +58,11 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
             binding.loginProgressBar.visible(it is Resource.Loading)
             when(it){
                 is Resource.Success -> {
-                    //Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_LONG).show()
+                    //Toast.makeText(requireContext(), it.value.id.toString(), Toast.LENGTH_LONG).show()
                     //val deviceId: String = getIMEIDeviceId(requireContext())
                     lifecycleScope.launch {
                         viewModel.saveAuthToken(it.value.jwt)
+                        viewModel.saveOperatorId(it.value.id)
                         requireActivity().startNewActivity(HomeActivity::class.java)
                     }
 

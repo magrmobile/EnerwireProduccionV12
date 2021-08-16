@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.createDataStore
 import kotlinx.coroutines.flow.Flow
@@ -37,6 +38,17 @@ class UserPreferences(
         }
     }
 
+    val operatorId: Flow<Int?>
+        get() = dataStore.data.map { preferences ->
+            preferences[KEY_OPERATOR_ID]
+        }
+
+    suspend fun saveOperatorId(operatorId: Int){
+        dataStore.edit { preferences ->
+            preferences[KEY_OPERATOR_ID] = operatorId
+        }
+    }
+
     suspend fun clear(){
         dataStore.edit { preferences ->
             preferences.clear()
@@ -46,5 +58,6 @@ class UserPreferences(
     companion object {
         private val KEY_AUTH = stringPreferencesKey("key_auth")
         private val KEY_IMEI = stringPreferencesKey("key_imei")
+        private val KEY_OPERATOR_ID = intPreferencesKey("key_operator_id")
     }
 }

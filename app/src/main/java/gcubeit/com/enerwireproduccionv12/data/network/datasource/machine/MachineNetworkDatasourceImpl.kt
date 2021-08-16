@@ -1,11 +1,11 @@
 package gcubeit.com.enerwireproduccionv12.data.network.datasource.machine
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import gcubeit.com.enerwireproduccionv12.data.AppApiService
 import gcubeit.com.enerwireproduccionv12.data.network.response.machine.MachinesResponse
 import gcubeit.com.enerwireproduccionv12.util.NoConnectivityException
+import timber.log.Timber
 
 class MachineNetworkDatasourceImpl(
     private val appApiService: AppApiService
@@ -20,8 +20,8 @@ class MachineNetworkDatasourceImpl(
                 .getMachines(deviceId)
                 .await()
             _downloadedMachines.postValue(fetchedMachines)
-        }catch (e: NoConnectivityException){
-            Log.e("Connectivity", "No Internet Connection.", e)
+        }catch (e: NoConnectivityException) {
+            Timber.e(e, "No Internet Connection.")
         }
     }
 }

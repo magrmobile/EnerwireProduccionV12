@@ -8,11 +8,8 @@ import gcubeit.com.enerwireproduccionv12.data.database.UserPreferences
 import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptor
 import gcubeit.com.enerwireproduccionv12.ui.login.LoginActivity
 import gcubeit.com.enerwireproduccionv12.util.startNewActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
@@ -33,7 +30,7 @@ abstract class BaseFragment<VM: BaseViewModel>: Fragment(), CoroutineScope, Kode
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        job = Job()
+        job = SupervisorJob()
     }
 
     fun logout() = lifecycleScope.launch {
@@ -45,7 +42,7 @@ abstract class BaseFragment<VM: BaseViewModel>: Fragment(), CoroutineScope, Kode
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         job.cancel()
+        super.onDestroy()
     }
 }

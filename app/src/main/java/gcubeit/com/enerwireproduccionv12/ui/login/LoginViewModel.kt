@@ -27,4 +27,8 @@ class LoginViewModel(
     suspend fun saveAuthToken(token: String) {
         repository.saveAuthToken(token)
     }
+
+    suspend fun saveOperatorId(operatorId: Int) {
+        repository.saveOperatorId(operatorId)
+    }
 }

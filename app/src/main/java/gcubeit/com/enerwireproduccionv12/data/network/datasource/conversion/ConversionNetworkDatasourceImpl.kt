@@ -9,6 +9,7 @@ import gcubeit.com.enerwireproduccionv12.data.network.response.conversion.Conver
 import gcubeit.com.enerwireproduccionv12.data.network.response.operator.OperatorsResponse
 import gcubeit.com.enerwireproduccionv12.data.network.response.product.ProductsResponse
 import gcubeit.com.enerwireproduccionv12.util.NoConnectivityException
+import timber.log.Timber
 
 class ConversionNetworkDatasourceImpl(
     private val appApiService: AppApiService
@@ -23,8 +24,8 @@ class ConversionNetworkDatasourceImpl(
                 .getConversions()
                 .await()
             _downloadedConversions.postValue(fetchedConversions)
-        }catch (e: NoConnectivityException){
-            Log.e("Connectivity", "No Internet Connection.", e)
+        }catch (e: NoConnectivityException) {
+            Timber.e(e, "No Internet Connection.")
         }
     }
 }

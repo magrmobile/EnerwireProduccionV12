@@ -18,4 +18,8 @@ class LoginRepository(
     suspend fun saveAuthToken(token: String){
         preferences.saveAuthToken(token)
     }
+
+    suspend fun saveOperatorId(operatorId: Int){
+        preferences.saveOperatorId(operatorId)
+    }
 }
