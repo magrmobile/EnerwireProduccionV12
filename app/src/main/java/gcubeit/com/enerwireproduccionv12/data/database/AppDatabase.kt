@@ -4,17 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import gcubeit.com.enerwireproduccionv12.R
-import gcubeit.com.enerwireproduccionv12.data.AppApiService
 import gcubeit.com.enerwireproduccionv12.data.database.entity.*
-import gcubeit.com.enerwireproduccionv12.data.database.views.StopsDetail
-import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptorImpl
-import gcubeit.com.enerwireproduccionv12.util.getIMEIDeviceId
-import gcubeit.com.enerwireproduccionv12.util.ioThread
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Database(
     entities = [
@@ -42,13 +33,12 @@ abstract class AppDatabase: RoomDatabase() {
         @Volatile private var instance: AppDatabase? = null
         private val LOCK = Any()
 
-        operator fun invoke(context: Context, scope: CoroutineScope) = instance ?: synchronized(LOCK) {
-            instance ?: buildDatabase(context, scope).also { instance = it }
+        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
+            instance ?: buildDatabase(context).also { instance = it }
         }
 
         private fun buildDatabase(
-            context: Context,
-            scope: CoroutineScope
+            context: Context
         ) =
             Room.databaseBuilder(
                 context.applicationContext,

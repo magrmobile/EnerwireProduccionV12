@@ -6,85 +6,79 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import gcubeit.com.enerwireproduccionv12.data.database.AppDatabase
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import gcubeit.com.enerwireproduccionv12.data.database.DbStopDao
-import gcubeit.com.enerwireproduccionv12.data.database.UserPreferences
 import gcubeit.com.enerwireproduccionv12.data.network.datasource.stop.StopNetworkDatasource
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.stop.StopNetworkDatasourceImpl
-import gcubeit.com.enerwireproduccionv12.data.repository.dashboard.DashboardRepository
 import gcubeit.com.enerwireproduccionv12.data.repository.stop.StopRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.databinding.StopsFragmentBinding
 import gcubeit.com.enerwireproduccionv12.ui.base.BaseFragment
+import gcubeit.com.enerwireproduccionv12.util.visible
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kodein.di.generic.instance
 
-private const val ARG_MACHINE_ID = "machine_id"
-private const val ARG_MACHINE_NAME = "machine_name"
 
+@DelicateCoroutinesApi
 class StopsFragment : BaseFragment<StopsViewModel>()  {
+    private val args by navArgs<StopsFragmentArgs>()
 
-    private var param1: Int? = null
-    private var param2: String? = null
-
-    companion object {
-        fun newInstance(param1: Int, param2: String?) =
-            StopsFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_MACHINE_ID, param1)
-                    putString(ARG_MACHINE_NAME, param2)
-                }
-            }
-    }
+    private lateinit var binding: StopsFragmentBinding
 
     private val dbStopDao : DbStopDao by instance()
     private val stopNetworkDatasource : StopNetworkDatasource by instance()
-    //private val userPreferences : UserPreferences by instance()
 
     private lateinit var stopRepository: StopRepositoryImpl
-    private lateinit var stopsViewModelFactory: StopsViewModelFactory // by instance()
-    private lateinit var binding: StopsFragmentBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getInt(ARG_MACHINE_ID)
-            param2 = it.getString(ARG_MACHINE_NAME)
-        }
-    }
+    private lateinit var stopsViewModelFactory: StopsViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         binding = StopsFragmentBinding.inflate(inflater, container, false)
 
-        requireActivity().title = param2
+        // StopsViewModel
+        stopRepository = StopRepositoryImpl(dbStopDao, stopNetworkDatasource, userPreferences)
+        stopsViewModelFactory = StopsViewModelFactory(stopRepository, args.machineId)
+        viewModel = ViewModelProvider(this, stopsViewModelFactory).get(StopsViewModel::class.java)
 
-        binding.tvTitle.text = param2
+        // RecyclerView
+        val adapter = StopsAdapter(requireContext(), viewModel)
+        val recyclerView = binding.rvStopsGrid
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        lifecycleScope.launch {
+            val currentStops = viewModel.stopsData.await()
+            currentStops.observeForever { stops ->
+                adapter.setData(stops!!)
+            }
+        }
+
+        if(args.processId == 1 || args.processId == 3) {
+            binding.tvGridPackingH.visible(false)
+            binding.tvGridQuantityH.visible(false)
+        }
+
+        binding.fab.setOnClickListener {
+            launch {
+                val action = StopsFragmentDirections.actionStopsFragmentToCreateFragment(args.machineId, userPreferences.operatorId.first().toInt(), args.processId, args.title)
+                it.findNavController().navigate(action)
+            }
+        }
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        bindUI()
+    /*fun refreshAdapter() {
+        binding.rvStopsGrid.adapter?.notifyDataSetChanged()
     }
 
-    private fun bindUI() = launch {
-        val data = viewModel.machineData.await()
-        data.observe(viewLifecycleOwner, Observer{
-            binding.tvTitle.text = it.toString()
-        })
-        //val userId = userPreferences.operatorId.first()
-        //Toast.makeText(requireContext(), userId.toString(), Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        stopRepository = StopRepositoryImpl(dbStopDao, stopNetworkDatasource, userPreferences)
-        stopsViewModelFactory = StopsViewModelFactory(stopRepository, param1)
-        viewModel = ViewModelProvider(this, stopsViewModelFactory)
-            .get(StopsViewModel::class.java)
-    }
+    override fun onResume() {
+        super.onResume()
+        refreshAdapter()
+    }*/
 }

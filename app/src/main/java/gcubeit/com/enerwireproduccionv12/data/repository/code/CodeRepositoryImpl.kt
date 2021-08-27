@@ -1,5 +1,7 @@
 package gcubeit.com.enerwireproduccionv12.data.repository.code
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import gcubeit.com.enerwireproduccionv12.data.database.DbCodeDao
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbCode
@@ -7,20 +9,22 @@ import gcubeit.com.enerwireproduccionv12.data.network.datasource.code.CodeNetwor
 import gcubeit.com.enerwireproduccionv12.data.network.response.code.CodesResponse
 import gcubeit.com.enerwireproduccionv12.data.network.response.code.asDatabaseModel
 import gcubeit.com.enerwireproduccionv12.data.repository.BaseRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.time.ZonedDateTime
 import java.util.*
 
+@DelicateCoroutinesApi
 class CodeRepositoryImpl(
     private val dbCodeDao: DbCodeDao,
     private val codeNetworkDatasource: CodeNetworkDatasource,
 ): BaseRepository(), CodeRepository {
+    //val readCodes: LiveData<List<DbCode>> = dbCodeDao.getAllCodes()
+
     init {
-        codeNetworkDatasource.downloadedCodes.observeForever { newCodes ->
-            persistFetchedCodes(newCodes)
+        Handler(Looper.getMainLooper()).post {
+            codeNetworkDatasource.downloadedCodes.observeForever { newCodes ->
+                persistFetchedCodes(newCodes)
+            }
         }
     }
 
@@ -31,10 +35,10 @@ class CodeRepositoryImpl(
         }
     }
 
-    private fun persistFetchedCodes(fetchedCodes: List<DbCode>){
+    private fun persistFetchedCodes(fetchedCodes: CodesResponse){
         GlobalScope.launch(Dispatchers.IO) {
             //dbCodeDao.deleteAll()
-            dbCodeDao.insertAll(fetchedCodes)
+            dbCodeDao.insertAll(fetchedCodes.codes.asDatabaseModel())
         }
     }
 

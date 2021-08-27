@@ -9,13 +9,11 @@ import gcubeit.com.enerwireproduccionv12.data.network.response.machine.MachinesR
 import gcubeit.com.enerwireproduccionv12.data.network.response.machine.asDatabaseModel
 import gcubeit.com.enerwireproduccionv12.data.repository.BaseRepository
 import gcubeit.com.enerwireproduccionv12.util.getIMEIDeviceId
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.time.ZonedDateTime
 import java.util.*
 
+@DelicateCoroutinesApi
 class HomeRepositoryImpl(
     private val dbMachineDao: DbMachineDao,
     private val machineNetworkDatasource: MachineNetworkDatasource,

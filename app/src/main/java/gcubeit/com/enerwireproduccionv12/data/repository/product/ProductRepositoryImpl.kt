@@ -1,5 +1,7 @@
 package gcubeit.com.enerwireproduccionv12.data.repository.product
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import gcubeit.com.enerwireproduccionv12.data.database.DbProductDao
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbProduct
@@ -7,20 +9,20 @@ import gcubeit.com.enerwireproduccionv12.data.network.datasource.product.Product
 import gcubeit.com.enerwireproduccionv12.data.network.response.product.ProductsResponse
 import gcubeit.com.enerwireproduccionv12.data.network.response.product.asDatabaseModel
 import gcubeit.com.enerwireproduccionv12.data.repository.BaseRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.time.ZonedDateTime
 import java.util.*
 
+@DelicateCoroutinesApi
 class ProductRepositoryImpl(
     private val dbProductDao: DbProductDao,
     private val productNetworkDatasource: ProductNetworkDatasource,
 ): BaseRepository(), ProductRepository {
     init {
-        productNetworkDatasource.downloadedProducts.observeForever { newProducts ->
-            persistFetchedProducts(newProducts)
+        Handler(Looper.getMainLooper()).post {
+            productNetworkDatasource.downloadedProducts.observeForever { newProducts ->
+                persistFetchedProducts(newProducts)
+            }
         }
     }
 
@@ -51,4 +53,6 @@ class ProductRepositoryImpl(
         val thirtyMinutesAgo = ZonedDateTime.now().minusMinutes(30)
         return lastFetchTime.isBefore(thirtyMinutesAgo)
     }
+
+    fun getProductsByProcess(machineId: Int): LiveData<List<DbProduct>> = dbProductDao.getProductsByProcess(machineId)
 }

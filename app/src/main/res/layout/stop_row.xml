@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TableRow tools:ignore="UselessParent">
+        <ImageButton
+            android:id="@+id/btnDelete"
+            app:srcCompat="@drawable/ic_cancel"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:background="@drawable/text_style"
+            android:contentDescription="@string/button_delete"
+            app:tint="@android:color/holo_red_dark" />
+        <ImageButton
+            android:id="@+id/btnEdit"
+            app:srcCompat="@drawable/ic_edit"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:background="@color/colorPrimaryDark"
+            android:contentDescription="@string/button_edit"
+            app:tint="@android:color/holo_blue_dark" />
+        <TextView
+            android:id="@+id/tvGridDate"
+            style="@style/grid_cell"
+            android:layout_width="125dp"
+            tools:text="2021-01-25"/>
+        <TextView
+            android:id="@+id/tvGridSchedule"
+            style="@style/grid_cell"
+            android:layout_width="80dp"
+            tools:text="D"/>
+        <TextView
+            android:id="@+id/tvGridOperator"
+            style="@style/grid_cell"
+            android:layout_width="200dp"
+            tools:text="Operador"/>
+        <TextView
+            android:id="@+id/tvGridStartStop"
+            style="@style/grid_cell"
+            android:layout_width="80dp"
+            tools:text="06:00:00"/>
+        <TextView
+            android:id="@+id/tvGridEndStop"
+            style="@style/grid_cell"
+            android:layout_width="80dp"
+            tools:text="08:00:00"/>
+        <TextView
+            android:id="@+id/tvGridProduct"
+            style="@style/grid_cell"
+            android:layout_width="200dp"
+            tools:text="Producto 1"/>
+        <TextView
+            android:id="@+id/tvGridCode"
+            style="@style/grid_cell"
+            android:layout_width="200dp"
+            tools:text="0"/>
+        <TextView
+            android:id="@+id/tvGridPacking"
+            style="@style/grid_cell"
+            android:layout_width="200dp"
+            tools:text="Paquete 1"/>
+        <TextView
+            android:id="@+id/tvGridQuantity"
+            style="@style/grid_cell"
+            android:layout_width="100dp"
+            tools:text="10000"/>
+        <TextView
+            android:id="@+id/tvGridMeters"
+            style="@style/grid_cell"
+            android:layout_width="200dp"
+            tools:text="10000"/>
+        <TextView
+            android:id="@+id/tvGridComment"
+            style="@style/grid_cell"
+            android:layout_width="250dp"
+            android:maxLines="2"
+            tools:text="Comentario"/>
+    </TableRow>
+</TableLayout>

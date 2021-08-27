@@ -6,5 +6,5 @@ import gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop
 interface StopRepository {
     suspend fun getStops(): LiveData<out List<DbStop>>
 
-    suspend fun getStopsByMachine(machineId: Int): LiveData<out List<DbStop>>
+    //suspend fun getStopsByMachine(machineId: Int): LiveData<out List<DbStop>>
 }

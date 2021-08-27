@@ -23,7 +23,7 @@
     <string name="label_confirm_stop_data">Resumen de Paro</string>
     <string name="label_start_datetime_stop">Fecha de Inicio</string>
     <string name="label_end_datetime_stop">Fecha de Fin</string>
-    <string name="btn_confirm">Confirmar</string>
+    <string name="btn_confirm">Guardar</string>
     <string name="press_back_again">Presione una vez mas para salir</string>
     <string name="error_loading_codes">Ocurrio un error al cargar los codigos de paro</string>
     <string name="dialog_create_stop_exit_title">Estas seguro que deseas salir?</string>
@@ -123,6 +123,8 @@
     <string name="lbl_btn_create">Crear</string>
     <string name="lbl_btn_edit">Editar</string>
     <string name="database_name">enerwire.db</string>
+    <string name="fab_content_description">fab content description</string>
+    <string name="todo">TODO</string>
 
     <string-array name="animes">
         <item>Black Jack</item>
@@ -132,6 +134,10 @@
         <item>Digimon</item>
         <item>Samurai X</item>
         <item>Bersek</item>
+    </string-array>
+
+    <string-array name="colors">
+        <item>Seleccionar Color</item>
     </string-array>
 
     <string-array name="codes">

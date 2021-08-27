@@ -24,11 +24,7 @@ class LoginViewModel(
         _loginResponse.value = repository.login(username, password)
     }
 
-    suspend fun saveAuthToken(token: String) {
-        repository.saveAuthToken(token)
-    }
-
-    suspend fun saveOperatorId(operatorId: Int) {
-        repository.saveOperatorId(operatorId)
+    suspend fun storeData(token: String, operatorId: Int, lastStopDateTimeStart: String) {
+        repository.storeData(token, operatorId, lastStopDateTimeStart)
     }
 }

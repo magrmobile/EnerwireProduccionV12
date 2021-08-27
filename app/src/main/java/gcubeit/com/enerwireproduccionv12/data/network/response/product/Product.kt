@@ -13,7 +13,11 @@ data class Product(
     @SerializedName("product_name")
     val productName: String,
     val stock: String?
-)
+) {
+    override fun toString(): String {
+        return productName
+    }
+}
 
 fun List<Product>.asDatabaseModel(): List<DbProduct> {
     return map {

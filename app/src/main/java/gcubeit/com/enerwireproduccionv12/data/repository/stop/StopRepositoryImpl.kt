@@ -1,38 +1,38 @@
 package gcubeit.com.enerwireproduccionv12.data.repository.stop
 
-import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import gcubeit.com.enerwireproduccionv12.data.database.DbStopDao
 import gcubeit.com.enerwireproduccionv12.data.database.UserPreferences
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop
+import gcubeit.com.enerwireproduccionv12.data.database.entity.relations.StopsDetails
+import gcubeit.com.enerwireproduccionv12.data.database.views.StopsDashboard
 import gcubeit.com.enerwireproduccionv12.data.network.datasource.stop.StopNetworkDatasource
 import gcubeit.com.enerwireproduccionv12.data.network.response.stop.StopsResponse
 import gcubeit.com.enerwireproduccionv12.data.network.response.stop.asDatabaseModel
 import gcubeit.com.enerwireproduccionv12.data.repository.BaseRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import timber.log.Timber
+import kotlinx.coroutines.*
 import java.time.ZonedDateTime
 import java.util.*
 
+@DelicateCoroutinesApi
 class StopRepositoryImpl(
     private val dbStopDao: DbStopDao,
-    private val StopNetworkDatasource: StopNetworkDatasource,
+    private val stopNetworkDatasource: StopNetworkDatasource,
     private val userPreferences: UserPreferences
 ): BaseRepository(), StopRepository {
     init {
-        StopNetworkDatasource.downloadedStops.observeForever { newStops ->
-            persistFetchedStops(newStops)
+        Handler(Looper.getMainLooper()).post {
+            stopNetworkDatasource.downloadedStops.observeForever { newStops ->
+                persistFetchedStops(newStops)
+            }
         }
     }
 
     override suspend fun getStops(): LiveData<out List<DbStop>> {
         return withContext(Dispatchers.IO){
-            Timber.d("User OperatorId: " + userPreferences.operatorId.first().toString())
+            //Timber.d("User OperatorId: " + userPreferences.operatorId.first().toString())
             initStopsData()
             return@withContext dbStopDao.getAllStops()
         }
@@ -47,12 +47,12 @@ class StopRepositoryImpl(
 
     private suspend fun initStopsData() {
         if(isFetchCurrentNeeded(ZonedDateTime.now().minusMinutes(1)))
-            fetchStops(userPreferences.operatorId.first()!!)
+            fetchStops()
     }
 
-    private suspend fun fetchStops(operatorId: Int) {
+    private suspend fun fetchStops() {
         //Timber.w(operatorId.toString())
-        StopNetworkDatasource.fetchStops(operatorId)
+        stopNetworkDatasource.fetchStops()
     }
 
     private fun isFetchCurrentNeeded(lastFetchTime: ZonedDateTime): Boolean {
@@ -60,9 +60,20 @@ class StopRepositoryImpl(
         return lastFetchTime.isBefore(thirtySecondsAgo)
     }
 
-    override suspend fun getStopsByMachine(machineId: Int): LiveData<out List<DbStop>>{
+    suspend fun getStopsByMachine(machineId: Int): LiveData<List<StopsDetails>>{
         return withContext(Dispatchers.IO){
             return@withContext dbStopDao.getStopsByMachine(machineId)
         }
     }
+
+    suspend fun getStopsDashboard(): LiveData<List<StopsDashboard>>{
+        return withContext(Dispatchers.IO){
+            return@withContext dbStopDao.getStopsDashboard()
+        }
+    }
+
+    //fun getStopsByMachine(machineId: Int): LiveData<List<StopsDetails>> = dbStopDao.getStopsByMachine(machineId)
+
+
+    fun getLastStopDateTime(machineId: Int): LiveData<String> = dbStopDao.getLastStopDateTime(machineId)
 }

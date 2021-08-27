@@ -11,7 +11,11 @@ data class Machine(
     @SerializedName("process_id")
     val processId: Int,
     val warehouse: String?
-)
+) {
+    override fun toString(): String {
+        return machineName
+    }
+}
 
 fun List<Machine>.asDatabaseModel(): List<DbMachine> {
     return map {

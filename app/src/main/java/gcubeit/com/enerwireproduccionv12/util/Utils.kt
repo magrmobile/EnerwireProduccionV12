@@ -24,7 +24,8 @@ fun<A: Activity> Activity.startNewActivity(activity: Class<A>){
     }
 }
 
-@SuppressLint("HardwareIds", "MissingPermission")
+@SuppressLint("HardwareIds", "MissingPermission", "ObsoleteSdkInt")
+@Suppress("DEPRECATION")
 fun getIMEIDeviceId(context: Context): String {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
@@ -33,7 +34,7 @@ fun getIMEIDeviceId(context: Context): String {
             context.getSystemService(AppCompatActivity.TELEPHONY_SERVICE) as TelephonyManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                return ""
+                return ""//"c429fb8a505b9a65"
             }
         }
         if (mTelephony.deviceId != null) {

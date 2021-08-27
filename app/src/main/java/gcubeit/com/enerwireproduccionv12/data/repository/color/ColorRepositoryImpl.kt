@@ -1,5 +1,7 @@
 package gcubeit.com.enerwireproduccionv12.data.repository.color
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import gcubeit.com.enerwireproduccionv12.data.database.DbColorDao
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbColor
@@ -7,20 +9,20 @@ import gcubeit.com.enerwireproduccionv12.data.network.datasource.color.ColorNetw
 import gcubeit.com.enerwireproduccionv12.data.network.response.color.ColorsResponse
 import gcubeit.com.enerwireproduccionv12.data.network.response.color.asDatabaseModel
 import gcubeit.com.enerwireproduccionv12.data.repository.BaseRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.time.ZonedDateTime
 import java.util.*
 
+@DelicateCoroutinesApi
 class ColorRepositoryImpl(
     private val dbColorDao: DbColorDao,
     private val colorNetworkDatasource: ColorNetworkDatasource,
 ): BaseRepository(), ColorRepository {
     init {
-        colorNetworkDatasource.downloadedColors.observeForever { newColors->
-            persistFetchedColors(newColors)
+        Handler(Looper.getMainLooper()).post {
+            colorNetworkDatasource.downloadedColors.observeForever { newColors ->
+                persistFetchedColors(newColors)
+            }
         }
     }
 

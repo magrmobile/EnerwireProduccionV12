@@ -58,11 +58,14 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
             binding.loginProgressBar.visible(it is Resource.Loading)
             when(it){
                 is Resource.Success -> {
-                    //Toast.makeText(requireContext(), it.value.id.toString(), Toast.LENGTH_LONG).show()
+                    //Toast.makeText(requireContext(), it.value.lastStopDateTimeStart, Toast.LENGTH_LONG).show()
                     //val deviceId: String = getIMEIDeviceId(requireContext())
                     lifecycleScope.launch {
-                        viewModel.saveAuthToken(it.value.jwt)
-                        viewModel.saveOperatorId(it.value.id)
+                        viewModel.storeData(
+                            it.value.jwt,
+                            it.value.id,
+                            it.value.lastStopDateTimeStart
+                        )
                         requireActivity().startNewActivity(HomeActivity::class.java)
                     }
 

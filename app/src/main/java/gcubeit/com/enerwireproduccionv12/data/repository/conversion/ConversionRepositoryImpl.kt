@@ -1,31 +1,28 @@
 package gcubeit.com.enerwireproduccionv12.data.repository.conversion
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
-import gcubeit.com.enerwireproduccionv12.data.database.DbColorDao
 import gcubeit.com.enerwireproduccionv12.data.database.DbConversionDao
-import gcubeit.com.enerwireproduccionv12.data.database.entity.DbColor
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbConversion
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.color.ColorNetworkDatasource
 import gcubeit.com.enerwireproduccionv12.data.network.datasource.conversion.ConversionNetworkDatasource
-import gcubeit.com.enerwireproduccionv12.data.network.response.color.ColorsResponse
-import gcubeit.com.enerwireproduccionv12.data.network.response.color.asDatabaseModel
 import gcubeit.com.enerwireproduccionv12.data.network.response.conversion.ConversionsResponse
 import gcubeit.com.enerwireproduccionv12.data.network.response.conversion.asDatabaseModel
 import gcubeit.com.enerwireproduccionv12.data.repository.BaseRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.time.ZonedDateTime
 import java.util.*
 
+@DelicateCoroutinesApi
 class ConversionRepositoryImpl(
     private val dbConversionDao: DbConversionDao,
     private val conversionNetworkDatasource: ConversionNetworkDatasource,
 ): BaseRepository(), ConversionRepository {
     init {
-        conversionNetworkDatasource.downloadedConversions.observeForever { newConversions->
-            persistFetchedConversions(newConversions)
+        Handler(Looper.getMainLooper()).post {
+            conversionNetworkDatasource.downloadedConversions.observeForever { newConversions ->
+                persistFetchedConversions(newConversions)
+            }
         }
     }
 

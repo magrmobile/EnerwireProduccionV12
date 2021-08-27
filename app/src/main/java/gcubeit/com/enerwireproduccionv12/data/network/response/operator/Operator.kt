@@ -15,7 +15,16 @@ data class Operator(
     val supervisorId: Int?,
     @SerializedName("process_id")
     val processId: Int
-)
+) {
+    override fun toString(): String {
+        return if(this.id == -1) {
+            name
+        } else {
+            val nameParts = name.split(" ")
+            nameParts[0] + " " + nameParts[1]
+        }
+    }
+}
 
 fun List<Operator>.asDatabaseModel(): List<DbOperator> {
     return map {

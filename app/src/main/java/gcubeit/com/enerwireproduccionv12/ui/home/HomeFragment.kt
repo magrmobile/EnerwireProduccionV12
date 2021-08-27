@@ -1,38 +1,29 @@
 package gcubeit.com.enerwireproduccionv12.ui.home
 
-import android.content.Context
 import android.os.Bundle
-import android.view.*
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import gcubeit.com.enerwireproduccionv12.R
 import gcubeit.com.enerwireproduccionv12.databinding.HomeFragmentBinding
-import gcubeit.com.enerwireproduccionv12.ui.base.BaseFragment
-import gcubeit.com.enerwireproduccionv12.ui.dashboard.DashboardFragment
-import gcubeit.com.enerwireproduccionv12.ui.stops.StopsFragment
-import kotlinx.coroutines.launch
-import org.kodein.di.generic.instance
 
-class HomeFragment : BaseFragment<HomeViewModel>() {
-    private val homeViewModelFactory: HomeViewModelFactory by instance()
+class HomeFragment : Fragment() {
     private lateinit var binding: HomeFragmentBinding
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        setHasOptionsMenu(true)
         binding = HomeFragmentBinding.inflate(inflater, container, false)
+
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+        /*binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.tb_homeFragment -> {
                     true
@@ -43,11 +34,11 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
                 }
                 else -> false
             }
-        }
+        }*/
 
-        bindUI()
+        //bindUI()
 
-        binding.bottomNavView.setOnItemSelectedListener { menuItem ->
+        /*binding.bottomNavView.setOnItemSelectedListener { menuItem ->
             when(menuItem.itemId){
                 0 -> {
                     val fragment = DashboardFragment.newInstance()
@@ -63,25 +54,25 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
                     true
                 }
             }
-        }
+        }*/
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    /*private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = childFragmentManager
         fragmentManager.commit {
             setReorderingAllowed(true)
             replace(R.id.nav_app_fragment, fragment)
         }
-    }
+    }*/
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    /*override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this, homeViewModelFactory)
             .get(HomeViewModel::class.java)
-    }
+    }*/
 
-    private fun bindUI() = launch {
+    /*private fun bindUI() = launch {
         val menu = binding.bottomNavView.menu
 
         val currentMachines = viewModel.machines.await()
@@ -110,5 +101,5 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
                 }
             }
         })
-    }
+    }*/
 }

@@ -6,8 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbColor
-import gcubeit.com.enerwireproduccionv12.data.database.entity.DbOperator
-import gcubeit.com.enerwireproduccionv12.data.database.entity.DbProduct
 
 @Dao
 interface DbColorDao {

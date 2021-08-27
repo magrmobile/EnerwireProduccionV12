@@ -4,24 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import gcubeit.com.enerwireproduccionv12.databinding.DashboardFragmentBinding
 import gcubeit.com.enerwireproduccionv12.ui.base.BaseFragment
-import kotlinx.coroutines.flow.first
+import gcubeit.com.enerwireproduccionv12.util.visible
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
 import org.kodein.di.generic.instance
 
+@DelicateCoroutinesApi
 class DashboardFragment : BaseFragment<DashboardViewModel>() {
-    companion object {
-        fun newInstance() = DashboardFragment()
-    }
-
     private val dashboardViewModelFactory: DashboardViewModelFactory by instance()
     private lateinit var binding: DashboardFragmentBinding
+
+    private val dashboardAdapter = DashboardAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,31 +27,27 @@ class DashboardFragment : BaseFragment<DashboardViewModel>() {
     ): View {
         binding = DashboardFragmentBinding.inflate(inflater, container, false)
 
-//        binding.btnStops.setOnClickListener {
-//            findNavController().navigate(R.id.action_dashboardFragment_to_stopsFragment)
-//        }
+        viewModel = ViewModelProvider(this, dashboardViewModelFactory).get(DashboardViewModel::class.java)
+
+        // RecyclerView
+        val recyclerView = binding.rvDashboard
+        recyclerView.adapter = dashboardAdapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        lifecycleScope.launch {
+            viewModel.data.await()
+            val dashboardData = viewModel.dashboardData.await()
+            dashboardData.observeForever { data ->
+                dashboardAdapter.setData(data!!)
+            }
+            binding.dashboardProgress.visible(false)
+        }
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        //val userId = userPreferences.authToken.asLiveData().value
-        //Toast.makeText(requireContext(), userId.toString(), Toast.LENGTH_SHORT).show()
-        //Toast.makeText(requireActivity().applicationContext, userPreferences.authToken.first(), Toast.LENGTH_SHORT).show()
-        bindUI()
-    }
-
-    private fun bindUI() = launch {
-        val data = viewModel.data.await()
-        data.observe(viewLifecycleOwner, Observer{
-            binding.tvTitle.text = it.size.toString()
-        })
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, dashboardViewModelFactory)
-            .get(DashboardViewModel::class.java)
+    override fun onResume() {
+        super.onResume()
+        dashboardAdapter.notifyDataSetChanged()
     }
 }

@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import gcubeit.com.enerwireproduccionv12.data.network.response.color.Color
-import gcubeit.com.enerwireproduccionv12.data.network.response.product.Product
 
 @Entity(tableName = "color_table")
 data class DbColor(

@@ -1,6 +1,8 @@
 package gcubeit.com.enerwireproduccionv12.data.repository.machine
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import gcubeit.com.enerwireproduccionv12.data.database.DbMachineDao
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbMachine
@@ -9,13 +11,11 @@ import gcubeit.com.enerwireproduccionv12.data.network.response.machine.MachinesR
 import gcubeit.com.enerwireproduccionv12.data.network.response.machine.asDatabaseModel
 import gcubeit.com.enerwireproduccionv12.data.repository.BaseRepository
 import gcubeit.com.enerwireproduccionv12.util.getIMEIDeviceId
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.time.ZonedDateTime
 import java.util.*
 
+@DelicateCoroutinesApi
 class MachineRepositoryImpl(
     private val dbMachineDao: DbMachineDao,
     private val machineNetworkDatasource: MachineNetworkDatasource,
@@ -24,8 +24,10 @@ class MachineRepositoryImpl(
     private val serial = getIMEIDeviceId(context)
 
     init {
-        machineNetworkDatasource.downloadedMachines.observeForever { newMachines ->
-            persistFetchedMachines(newMachines)
+        Handler(Looper.getMainLooper()).post {
+            machineNetworkDatasource.downloadedMachines.observeForever { newMachines ->
+                persistFetchedMachines(newMachines)
+            }
         }
         //Toast.makeText(context, serial, Toast.LENGTH_SHORT).show()
     }

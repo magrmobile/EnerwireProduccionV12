@@ -12,10 +12,10 @@ import gcubeit.com.enerwireproduccionv12.util.startNewActivity
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        //setContentView(R.layout.activity_main)
         val userPreferences = UserPreferences(this)
 
-        userPreferences.authToken.asLiveData().observe(this, Observer {
+        userPreferences.authToken.asLiveData().observe(this, {
             val activity = if(it == null) LoginActivity::class.java else HomeActivity::class.java
             startNewActivity(activity)
         })

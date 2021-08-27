@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbOperator
-import gcubeit.com.enerwireproduccionv12.data.database.entity.DbProduct
 
 @Dao
 interface DbOperatorDao {
@@ -16,8 +15,8 @@ interface DbOperatorDao {
     @Query("SELECT * FROM operator_table")
     fun getAllOperators(): LiveData<List<DbOperator>>
 
-    @Query("SELECT * FROM operator_table WHERE processId = :processId")
-    fun getOperatorsByProcess(processId: Int): LiveData<List<DbOperator>>
+    @Query("SELECT o.* FROM operator_table AS o JOIN machine_table m ON m.id = :machineId WHERE o.processId = m.processId")
+    fun getOperatorsByProcess(machineId: Int): LiveData<List<DbOperator>>
 
     @Query("SELECT * FROM operator_table WHERE id = :id")
     fun getOperator(id: Int): LiveData<DbOperator>

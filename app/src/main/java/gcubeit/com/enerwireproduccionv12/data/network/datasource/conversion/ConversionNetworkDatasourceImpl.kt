@@ -1,13 +1,9 @@
 package gcubeit.com.enerwireproduccionv12.data.network.datasource.conversion
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import gcubeit.com.enerwireproduccionv12.data.AppApiService
-import gcubeit.com.enerwireproduccionv12.data.network.response.color.ColorsResponse
 import gcubeit.com.enerwireproduccionv12.data.network.response.conversion.ConversionsResponse
-import gcubeit.com.enerwireproduccionv12.data.network.response.operator.OperatorsResponse
-import gcubeit.com.enerwireproduccionv12.data.network.response.product.ProductsResponse
 import gcubeit.com.enerwireproduccionv12.util.NoConnectivityException
 import timber.log.Timber
 

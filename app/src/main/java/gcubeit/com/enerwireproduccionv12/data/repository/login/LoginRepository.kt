@@ -15,11 +15,7 @@ class LoginRepository(
         api.login(username, password)
     }
 
-    suspend fun saveAuthToken(token: String){
-        preferences.saveAuthToken(token)
-    }
-
-    suspend fun saveOperatorId(operatorId: Int){
-        preferences.saveOperatorId(operatorId)
+    suspend fun storeData(token: String, operatorId: Int, lastStopDateTimeStart: String){
+        preferences.storeData(token, operatorId, lastStopDateTimeStart)
     }
 }

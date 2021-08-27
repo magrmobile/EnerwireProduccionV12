@@ -4,64 +4,224 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_app"
     app:startDestination="@id/dashboardFragment">
-
-    <fragment
-        android:id="@+id/dashboardFragment"
-        android:name="gcubeit.com.enerwireproduccionv12.ui.dashboard.DashboardFragment"
-        android:label="dashboard_fragment"
-        tools:layout="@layout/dashboard_fragment" >
-        <action
-            android:id="@+id/action_dashboardFragment_to_stopsFragment"
-            app:destination="@id/stopsFragment" />
-    </fragment>
+    <!-- Stops Fragment -->
     <fragment
         android:id="@+id/stopsFragment"
         android:name="gcubeit.com.enerwireproduccionv12.ui.stops.StopsFragment"
-        android:label="stops_fragment"
-        tools:layout="@layout/stops_fragment" >
+        android:label="{title}"
+        tools:layout="@layout/stops_fragment">
+        <argument
+            android:name="machineId"
+            app:argType="integer" />
+        <argument
+            android:name="processId"
+            app:argType="integer"/>
         <argument
             android:name="title"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null"/>
-        <argument
-            android:name="machine_id"
-            app:argType="integer"
-            android:defaultValue="0"/>
+            app:argType="string" />
         <action
             android:id="@+id/action_stopsFragment_to_createFragment"
-            app:destination="@id/createFragment" />
+            app:destination="@id/createFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_stopsFragment_to_editFragment"
-            app:destination="@id/editFragment" />
+            app:destination="@id/editFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+    <!-- Create Fragment -->
     <fragment
         android:id="@+id/createFragment"
         android:name="gcubeit.com.enerwireproduccionv12.ui.create.CreateFragment"
-        android:label="create_fragment"
+        android:label="{title}"
         tools:layout="@layout/create_fragment" >
         <action
             android:id="@+id/action_createFragment_to_confirmFragment"
-            app:destination="@id/confirmFragment" />
+            app:destination="@id/confirmFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <argument
+            android:name="machineId"
+            app:argType="integer" />
+        <argument
+            android:name="operatorId"
+            app:argType="integer" />
+        <argument
+            android:name="processId"
+            app:argType="integer"/>
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <!--<argument
+            android:name="dbStop"
+            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop"
+            app:nullable="true"
+            android:defaultValue="@null"/>-->
     </fragment>
+    <!-- Edit Fragment -->
     <fragment
         android:id="@+id/editFragment"
         android:name="gcubeit.com.enerwireproduccionv12.ui.edit.EditFragment"
-        android:label="edit_fragment"
+        android:label="{title}"
         tools:layout="@layout/edit_fragment" >
         <action
             android:id="@+id/action_editFragment_to_confirmFragment"
-            app:destination="@id/confirmFragment" />
+            app:destination="@id/confirmFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <argument
+            android:name="currentStop"
+            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop" />
+        <argument
+            android:name="machineId"
+            app:argType="integer" />
+        <argument
+            android:name="operatorId"
+            app:argType="integer" />
+        <argument
+            android:name="processId"
+            app:argType="integer"/>
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="productName"
+            app:argType="string" />
+        <!--<argument
+            android:name="dbStop"
+            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop" />-->
     </fragment>
+    <!-- Confirm Fragment -->
     <fragment
         android:id="@+id/confirmFragment"
         android:name="gcubeit.com.enerwireproduccionv12.ui.confirm.ConfirmFragment"
-        android:label="confirm_fragment"
-        tools:layout="@layout/confirm_fragment" >
+        android:label="{title}"
+        tools:layout="@layout/confirm_fragment">
         <action
             android:id="@+id/action_confirmFragment_to_stopsFragment"
             app:destination="@id/stopsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@id/stopsFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="stopConfirm"
+            app:argType="gcubeit.com.enerwireproduccionv12.data.database.views.StopConfirm" />
+        <argument
+            android:name="dbStop"
+            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop" />
+        <argument
+            android:name="machineId"
+            app:argType="integer"/>
+        <argument
+            android:name="processId"
+            app:argType="integer"/>
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <!--<argument
+            android:name="productName"
+            app:argType="string" />-->
+        <argument
+            android:name="action"
+            app:argType="integer" />
     </fragment>
+    <!-- Dashboard Fragment -->
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="gcubeit.com.enerwireproduccionv12.ui.dashboard.DashboardFragment"
+        android:label="Dashboard"
+        tools:layout="@layout/dashboard_fragment">
+    </fragment>
+    <!-- Action to_stopsFragment -->
+    <action
+        android:id="@+id/to_stopsFragment"
+        app:destination="@id/stopsFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:launchSingleTop="false"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/stopsFragment"
+        app:popUpToInclusive="true">
+        <argument
+            android:name="machineId"
+            app:argType="integer" />
+        <argument
+            android:name="processId"
+            app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </action>
+
+    <action
+        android:id="@+id/to_createFragment"
+        app:destination="@id/createFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/createFragment"
+        app:popUpToInclusive="true">
+        <argument
+            android:name="machineId"
+            app:argType="integer" />
+        <argument
+            android:name="operatorId"
+            app:argType="integer" />
+        <argument
+            android:name="processId"
+            app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <!--<argument
+            android:name="dbStop"
+            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop" />-->
+    </action>
+
+    <action
+        android:id="@+id/to_editFragment"
+        app:destination="@id/editFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:launchSingleTop="false"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/stopsFragment"
+        app:popUpToInclusive="true">
+        <argument
+            android:name="currentStop"
+            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop" />
+        <argument
+            android:name="machineId"
+            app:argType="integer" />
+        <argument
+            android:name="operatorId"
+            app:argType="integer" />
+        <argument
+            android:name="processId"
+            app:argType="integer"/>
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="productName"
+            app:argType="string" />
+        <!--<argument
+            android:name="dbStop"
+            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop" />-->
+    </action>
 </navigation>

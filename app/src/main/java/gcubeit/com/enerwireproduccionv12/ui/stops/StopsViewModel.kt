@@ -1,20 +1,28 @@
 package gcubeit.com.enerwireproduccionv12.ui.stops
 
-import androidx.lifecycle.viewModelScope
 import gcubeit.com.enerwireproduccionv12.data.repository.stop.StopRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.ui.base.BaseViewModel
 import gcubeit.com.enerwireproduccionv12.util.lazyDeferred
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class StopsViewModel(
     private val repository: StopRepositoryImpl,
     private val machineId: Int
 ) : BaseViewModel(repository) {
-    /*val data by lazyDeferred {
-        repository.getStops()
-    }*/
+    /*private val _stopsData = MutableLiveData<List<StopsDetails>>()
+    val stopsData: LiveData<List<StopsDetails>> get() = _stopsData
 
-    val machineData by lazyDeferred {
+    fun onCreate() {
+        viewModelScope.launch(Dispatchers.Main) {
+            _stopsData.value = repository.getStopsByMachine(machineId).value
+        }
+    }*/
+    val stopsDataAll by lazyDeferred {
+        repository.getStops()
+    }
+
+    val stopsData by lazyDeferred {
         repository.getStopsByMachine(machineId)
     }
 }

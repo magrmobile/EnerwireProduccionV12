@@ -3,54 +3,42 @@ package gcubeit.com.enerwireproduccionv12
 import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen
 import gcubeit.com.enerwireproduccionv12.data.AppApiService
-import gcubeit.com.enerwireproduccionv12.data.database.AppDatabase
-import gcubeit.com.enerwireproduccionv12.data.database.UserPreferences
-import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptor
-import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptorImpl
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.code.CodeNetworkDatasource
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.code.CodeNetworkDatasourceImpl
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.color.ColorNetworkDatasource
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.color.ColorNetworkDatasourceImpl
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.conversion.ConversionNetworkDatasource
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.conversion.ConversionNetworkDatasourceImpl
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.machine.MachineNetworkDatasource
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.machine.MachineNetworkDatasourceImpl
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.operator.OperatorNetworkDatasource
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.operator.OperatorNetworkDatasourceImpl
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.product.ProductNetworkDatasource
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.product.ProductNetworkDatasourceImpl
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.stop.StopNetworkDatasource
-import gcubeit.com.enerwireproduccionv12.data.network.datasource.stop.StopNetworkDatasourceImpl
+import gcubeit.com.enerwireproduccionv12.data.database.*
+import gcubeit.com.enerwireproduccionv12.data.network.*
+import gcubeit.com.enerwireproduccionv12.data.network.datasource.code.*
+import gcubeit.com.enerwireproduccionv12.data.network.datasource.color.*
+import gcubeit.com.enerwireproduccionv12.data.network.datasource.conversion.*
+import gcubeit.com.enerwireproduccionv12.data.network.datasource.machine.*
+import gcubeit.com.enerwireproduccionv12.data.network.datasource.operator.*
+import gcubeit.com.enerwireproduccionv12.data.network.datasource.product.*
+import gcubeit.com.enerwireproduccionv12.data.network.datasource.stop.*
+import gcubeit.com.enerwireproduccionv12.data.repository.BaseRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.code.CodeRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.color.ColorRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.conversion.ConversionRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.dashboard.DashboardRepositoryImpl
-import gcubeit.com.enerwireproduccionv12.data.repository.home.HomeRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.login.LoginRepository
 import gcubeit.com.enerwireproduccionv12.data.repository.machine.MachineRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.operator.OperatorRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.product.ProductRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.stop.StopRepositoryImpl
+import gcubeit.com.enerwireproduccionv12.ui.create.CreateViewModelFactory
 import gcubeit.com.enerwireproduccionv12.ui.dashboard.DashboardViewModelFactory
 import gcubeit.com.enerwireproduccionv12.ui.home.HomeViewModelFactory
-import gcubeit.com.enerwireproduccionv12.ui.stops.StopsViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.instance
-import org.kodein.di.generic.provider
-import org.kodein.di.generic.singleton
+import org.kodein.di.generic.*
 import timber.log.Timber
 
+@DelicateCoroutinesApi
 class EnerwireApplication: Application(), KodeinAware {
     override val kodein = Kodein.lazy {
         import(androidXModule(this@EnerwireApplication))
 
         bind() from singleton { CoroutineScope(SupervisorJob()) }
-        bind() from singleton { AppDatabase(instance(), instance()) }
+        bind() from singleton { AppDatabase(instance()) }
         bind() from singleton { instance<AppDatabase>().dbMachineDao() }
         bind() from singleton { instance<AppDatabase>().dbCodeDao() }
         bind() from singleton { instance<AppDatabase>().dbProductDao() }
@@ -66,10 +54,11 @@ class EnerwireApplication: Application(), KodeinAware {
         bind<OperatorNetworkDatasource>() with singleton { OperatorNetworkDatasourceImpl(instance()) }
         bind<ColorNetworkDatasource>() with singleton { ColorNetworkDatasourceImpl(instance()) }
         bind<ConversionNetworkDatasource>() with singleton { ConversionNetworkDatasourceImpl(instance()) }
-        bind<StopNetworkDatasource>() with singleton { StopNetworkDatasourceImpl(instance()) }
-        bind<UserPreferences>() with singleton { UserPreferences(context = applicationContext) }
+        bind() from singleton { StopNetworkDatasourceImpl(instance()) }
+        bind<UserPreferences>() with singleton { UserPreferences(instance()) }
         //bind() from singleton { instance<UserPreferences>().operatorId }
-        bind() from singleton { MachineRepositoryImpl(instance(), instance(),context = applicationContext) }
+        bind() from singleton { BaseRepositoryImpl() }
+        bind() from singleton { MachineRepositoryImpl(instance(), instance(), applicationContext) }
         bind() from singleton { CodeRepositoryImpl(instance(), instance()) }
         bind() from singleton { ProductRepositoryImpl(instance(), instance()) }
         bind() from singleton { OperatorRepositoryImpl(instance(), instance()) }
@@ -80,6 +69,7 @@ class EnerwireApplication: Application(), KodeinAware {
         bind<LoginRepository>() with singleton { LoginRepository(instance(), instance()) }
         bind<HomeViewModelFactory>() with provider { HomeViewModelFactory(instance()) }
         bind<DashboardViewModelFactory>() with provider { DashboardViewModelFactory(instance()) }
+        bind<CreateViewModelFactory>() with provider { CreateViewModelFactory(instance()) }
         //bind<StopsViewModelFactory>() with provider { StopsViewModelFactory(instance()) }
     }
 
