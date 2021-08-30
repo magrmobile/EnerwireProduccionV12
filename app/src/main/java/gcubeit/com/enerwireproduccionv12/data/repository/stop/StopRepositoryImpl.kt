@@ -3,6 +3,7 @@ package gcubeit.com.enerwireproduccionv12.data.repository.stop
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import gcubeit.com.enerwireproduccionv12.data.database.DbStopDao
 import gcubeit.com.enerwireproduccionv12.data.database.UserPreferences
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop
@@ -74,6 +75,23 @@ class StopRepositoryImpl(
 
     //fun getStopsByMachine(machineId: Int): LiveData<List<StopsDetails>> = dbStopDao.getStopsByMachine(machineId)
 
-
     fun getLastStopDateTime(machineId: Int): LiveData<String> = dbStopDao.getLastStopDateTime(machineId)
+
+    suspend fun addStop(stop: DbStop) {
+        return withContext(Dispatchers.IO) {
+            return@withContext stopNetworkDatasource.addStop(stop)
+        }
+    }
+
+    suspend fun localAddStop(stop: DbStop) {
+        return withContext(Dispatchers.IO) {
+            return@withContext dbStopDao.insert(stop)
+        }
+    }
+
+    suspend fun updateStop(stop: DbStop) {
+        return withContext(Dispatchers.IO) {
+            return@withContext stopNetworkDatasource.updateStop(stop)
+        }
+    }
 }

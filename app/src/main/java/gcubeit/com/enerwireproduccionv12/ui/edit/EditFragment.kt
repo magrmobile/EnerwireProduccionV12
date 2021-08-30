@@ -75,13 +75,14 @@ class EditFragment : Fragment(), CoroutineScope, KodeinAware {
         binding = EditFragmentBinding.inflate(inflater, container, false)
 
         // ViewModel
-        editViewModelFactory = EditViewModelFactory(application, args.currentStop.machineId)
+        editViewModelFactory = EditViewModelFactory(application, args.currentStop.machineId, args.processId)
         viewModel = ViewModelProvider(this, editViewModelFactory).get(EditViewModel::class.java)
+
+        //Toast.makeText(requireContext(), args.processId.toString(), Toast.LENGTH_LONG).show()
 
         bindUI()
 
-        //Toast.makeText(requireContext(), "${args.currentStop.productId.toString()} ${args.productName}", Toast.LENGTH_LONG).show()
-        //Toast.makeText(requireContext(), "OperatorId: ${args.operatorId.toString()}", Toast.LENGTH_LONG).show()
+        //binding.spinnerProduct.setSelectionP(args.currentStop.productId!!, args.productName)
 
         return binding.root
     }
@@ -177,10 +178,10 @@ class EditFragment : Fragment(), CoroutineScope, KodeinAware {
     private fun loadOperators() = lifecycleScope.launch {
         val operators = viewModel.operatorsByProcess.await()
 
-        operators.observe(viewLifecycleOwner, { data ->
+        //operators.observe(viewLifecycleOwner, { data ->
             val operatorsArray: ArrayList<Operator> = arrayListOf()
             operatorsArray.add(Operator(-1, getString(R.string.hint_select_operator), "", "", "", 0, 0))
-            for(arrOperator in data.asDomainModel()) {
+            for(arrOperator in operators.asDomainModel()) {
                 operatorsArray.add(arrOperator)
             }
 
@@ -201,15 +202,17 @@ class EditFragment : Fragment(), CoroutineScope, KodeinAware {
                 }
                 binding.spinnerOperator.setSelection(index)
             }
-        })
+        //})
     }
+
 
     private fun loadProducts() = lifecycleScope.launch {
         val products = viewModel.productsByProcess.await()
 
-        products.observe(viewLifecycleOwner, { data ->
+        //products.observe(viewLifecycleOwner, { data ->
             val productsArray: ArrayList<Product> = arrayListOf()
-            for(arrProduct in data.asDomainModel()) {
+
+            products.asDomainModel().forEach { arrProduct ->
                 productsArray.add(arrProduct)
             }
 
@@ -220,12 +223,13 @@ class EditFragment : Fragment(), CoroutineScope, KodeinAware {
             )
 
             binding.spinnerProduct.adapter = productsAdapter
+
             if(args.currentStop.productId != null) {
                 if(args.currentStop.productId!! > 0) {
                     binding.spinnerProduct.setSelectionP(args.currentStop.productId!!, args.productName)
                 }
             }
-        })
+        //})
     }
 
     private fun loadColors() = lifecycleScope.launch {

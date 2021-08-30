@@ -12,7 +12,7 @@ import gcubeit.com.enerwireproduccionv12.util.startNewActivity
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main)
         val userPreferences = UserPreferences(this)
 
         userPreferences.authToken.asLiveData().observe(this, {

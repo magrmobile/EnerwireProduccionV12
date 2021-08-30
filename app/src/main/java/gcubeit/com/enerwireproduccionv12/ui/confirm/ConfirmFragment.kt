@@ -64,23 +64,17 @@ class ConfirmFragment : Fragment(), CoroutineScope, KodeinAware {
 
         binding.btnBack.setOnClickListener {
             /*if(args.action == 1) {
-                val action = NavAppDirections.toCreateFragment(args.machineId, args.dbStop.operatorId, args.processId, args.title, args.dbStop)
-            }
-
-            if(args.action == 2) {
-                val action = NavAppDirections.toEditFragment(args.dbStop, args.machineId, args.dbStop.operatorId, args.processId, args.title, args.productName, args.dbStop)
-            }*/
-            if(args.action == 1) {
                 val action = ConfirmFragmentDirections.toCreateFragment(args.machineId, args.dbStop.operatorId, args.processId, args.title)
                 it.findNavController().navigate(action)
-            }
+            }*/
 
-            //it.findNavController().popBackStack()
+            it.findNavController().popBackStack()
         }
 
         binding.btnConfirmStop.setOnClickListener {
             if(args.action == 1) {
                 addStop(args.dbStop)
+                //Toast.makeText(requireContext(), args.dbStop.toString(), Toast.LENGTH_LONG).show()
             }
             if(args.action == 2) {
                 updateStop(args.dbStop)
@@ -165,6 +159,7 @@ class ConfirmFragment : Fragment(), CoroutineScope, KodeinAware {
 
     private fun addStop(stop: DbStop) {
         viewModel.addStop(stop)
+        //viewModel.localAddStop(stop)
         Toast.makeText(requireContext(), "Paro Insertado Satisfactoriamente", Toast.LENGTH_LONG).show()
 
         val action = ConfirmFragmentDirections.actionConfirmFragmentToStopsFragment(args.machineId, args.processId, args.title)

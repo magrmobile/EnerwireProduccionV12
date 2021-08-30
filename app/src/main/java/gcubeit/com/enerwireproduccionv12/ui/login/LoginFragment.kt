@@ -18,8 +18,10 @@ import gcubeit.com.enerwireproduccionv12.util.enable
 import gcubeit.com.enerwireproduccionv12.util.handleApiError
 import gcubeit.com.enerwireproduccionv12.util.startNewActivity
 import gcubeit.com.enerwireproduccionv12.util.visible
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
 
+@DelicateCoroutinesApi
 class LoginFragment : BaseFragment<LoginViewModel>() {
 
 //    companion object {

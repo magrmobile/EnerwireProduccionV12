@@ -24,7 +24,8 @@ import org.kodein.di.generic.instance
 @DelicateCoroutinesApi
 class CreateViewModel(
     application: Application,
-    private val machineId: Int? = null
+    private val machineId: Int? = null,
+    private val processId: Int? = null
 ) : AndroidViewModel(application), KodeinAware {
     override val kodein by closestKodein()
 
@@ -51,7 +52,7 @@ class CreateViewModel(
     val codes by lazyDeferred { codeRepository.getCodes() }
     val colors by lazyDeferred { colorRepository.getColors() }
     val conversions by lazyDeferred { conversionRepository.getConversions() }
-    val productsByProcess by lazyDeferred { productRepository.getProductsByProcess(machineId!!) }
+    val productsByProcess by lazyDeferred { productRepository.getProductsByProcess(processId!!) }
     val operatorsByProcess by lazyDeferred { operatorRepository.getOperatorsByProcess(machineId!!) }
 
     val lastStopDateTime = stopRepository.getLastStopDateTime(machineId!!)

@@ -208,6 +208,16 @@
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         tools:text="11:00:05 a.m."/>
+                    <TextView
+                        android:id="@+id/hiddenStartDateTimeStop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/hiddenEndDateTimeStop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"

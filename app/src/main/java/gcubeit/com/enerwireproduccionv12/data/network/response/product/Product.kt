@@ -6,12 +6,9 @@ import gcubeit.com.enerwireproduccionv12.data.database.entity.DbProduct
 
 data class Product(
     val id: Int,
-    @SerializedName("metal_type")
-    val metalType: String,
-    @SerializedName("process_id")
-    val processId: Int,
-    @SerializedName("product_name")
-    val productName: String,
+    @SerializedName("metal_type") val metalType: String,
+    @SerializedName("process_id") val processId: Int,
+    @SerializedName("product_name") val productName: String,
     val stock: String?
 ) {
     override fun toString(): String {

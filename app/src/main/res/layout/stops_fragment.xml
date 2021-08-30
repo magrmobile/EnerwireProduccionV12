@@ -38,12 +38,12 @@
                     android:id="@+id/tvGridStartStopH"
                     android:text="@string/grid_start_stop_column"
                     style="@style/grid_header"
-                    android:layout_width="80dp"/>
+                    android:layout_width="100dp"/>
                 <TextView
                     android:id="@+id/tvGridEndStopH"
                     android:text="@string/grid_end_stop_column"
                     style="@style/grid_header"
-                    android:layout_width="80dp"/>
+                    android:layout_width="100dp"/>
                 <TextView
                     android:id="@+id/tvGridProductH"
                     android:text="@string/grid_product_column"

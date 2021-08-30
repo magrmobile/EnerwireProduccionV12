@@ -45,9 +45,4 @@ class DashboardFragment : BaseFragment<DashboardViewModel>() {
 
         return binding.root
     }
-
-    override fun onResume() {
-        super.onResume()
-        dashboardAdapter.notifyDataSetChanged()
-    }
 }

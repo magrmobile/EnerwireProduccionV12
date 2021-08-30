@@ -76,15 +76,13 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
     ): View {
         binding = CreateFragmentBinding.inflate(inflater, container, false)
 
-        //userPreferences = UserPreferences(application)
-
         // ViewModel
-        createViewModelFactory = CreateViewModelFactory(application, args.machineId)
+        createViewModelFactory = CreateViewModelFactory(application, args.machineId, args.processId)
         viewModel = ViewModelProvider(this, createViewModelFactory).get(CreateViewModel::class.java)
 
         bindUI()
 
-        //Toast.makeText(requireContext(), "OperatorId: ${args.operatorId.toString()}", Toast.LENGTH_LONG).show()
+        //Toast.makeText(requireContext(), args.processId.toString(), Toast.LENGTH_LONG).show()
 
         return binding.root
     }
@@ -168,11 +166,12 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
     private fun loadOperators() = lifecycleScope.launch {
         val operators = viewModel.operatorsByProcess.await()
 
-        operators.observe(viewLifecycleOwner, { data ->
+        //operators.observe(viewLifecycleOwner, { data ->
             val operatorsArray: ArrayList<Operator> = arrayListOf()
+
             operatorsArray.add(Operator(-1, getString(R.string.hint_select_operator), "", "", "", 0, 0))
 
-            for(arrOperator in data.asDomainModel()) {
+            operators.asDomainModel().forEach { arrOperator ->
                 operatorsArray.add(arrOperator)
             }
 
@@ -197,17 +196,20 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
                 }
                 binding.spinnerOperator.setSelection(index)
             }
-        })
+        //})
     }
 
     private fun loadProducts() = lifecycleScope.launch {
         val products = viewModel.productsByProcess.await()
 
-        products.observe(viewLifecycleOwner, { data ->
+        //products.observe(viewLifecycleOwner, { data ->
             val productsArray: ArrayList<Product> = arrayListOf()
-            for(arrProduct in data.asDomainModel()) {
+
+            products.asDomainModel().forEach { arrProduct ->
                 productsArray.add(arrProduct)
             }
+
+            //Toast.makeText(requireContext(), data.size.toString(), Toast.LENGTH_LONG).show()
 
             val productsAdapter = ArrayAdapter(
                 requireContext(),
@@ -216,7 +218,7 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
             )
 
             binding.spinnerProduct.adapter = productsAdapter
-        })
+        //})
     }
 
     private fun loadColors() = lifecycleScope.launch {
@@ -277,6 +279,7 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
                 val formattedTime = time.format(DateTimeFormatter.ofPattern("HH:mm:ss a"))
                 binding.tvConfirmStartDateStop.text = formattedDate
                 binding.tvConfirmStartTimeStop.text = formattedTime
+                binding.hiddenStartDateTimeStop.text = data
                 //Toast.makeText(requireContext(), formattedDate + " " + formattedTime, Toast.LENGTH_LONG).show()
             } else {
                 val startDateTime = lastLogin.split(" ")
@@ -286,11 +289,13 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
                 val formattedTime = time.format(DateTimeFormatter.ofPattern("HH:mm:ss a"))
                 binding.tvConfirmStartDateStop.text = formattedDate
                 binding.tvConfirmStartTimeStop.text = formattedTime
+                binding.hiddenStartDateTimeStop.text = lastLogin
                 //Toast.makeText(requireContext(), lastLogin, Toast.LENGTH_LONG).show()
             }
         })
 
         binding.tvConfirmEndDateStop.text = SimpleDateFormat("dd MMMM, y ").format(Date())
+        binding.hiddenEndDateTimeStop.text = SimpleDateFormat("yyyy-mm-dd HH:mm:ss").format(Date())
     }
 
     private fun bindUI() {
@@ -307,8 +312,8 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
 
             override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val operator = adapter?.getItemAtPosition(position) as Operator
-                this@CreateFragment.arguments?.putInt("operatorId", operator.id)
-                //Toast.makeText(requireContext(), args.operatorId.toString(), Toast.LENGTH_SHORT).show()
+                //this@CreateFragment.arguments?.putInt("operatorId", operator.id)
+                //Toast.makeText(requireContext(), operator.id.toString(), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -480,6 +485,9 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
             null
         }
 
+        val stopDateTimeStart = binding.hiddenStartDateTimeStop.text.toString()
+        val stopDateTimeEnd = binding.hiddenEndDateTimeStop.text.toString()
+
         return DbStop(
             id = 0,
             machineId = args.machineId,
@@ -491,10 +499,10 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
             quantity = quantity,
             meters = meters,
             comment = comment,
-            "",
-            "",
-            "",
-            ""
+            stopDatetimeStart = stopDateTimeStart,
+            stopDatetimeEnd = stopDateTimeEnd,
+            null,
+            null
         )
     }
 

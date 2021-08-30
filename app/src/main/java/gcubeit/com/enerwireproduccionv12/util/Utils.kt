@@ -34,7 +34,7 @@ fun getIMEIDeviceId(context: Context): String {
             context.getSystemService(AppCompatActivity.TELEPHONY_SERVICE) as TelephonyManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                return ""//"c429fb8a505b9a65"
+                return "c429fb8a505b9a65"
             }
         }
         if (mTelephony.deviceId != null) {

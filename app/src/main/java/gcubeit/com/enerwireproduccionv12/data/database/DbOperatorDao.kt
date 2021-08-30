@@ -16,7 +16,7 @@ interface DbOperatorDao {
     fun getAllOperators(): LiveData<List<DbOperator>>
 
     @Query("SELECT o.* FROM operator_table AS o JOIN machine_table m ON m.id = :machineId WHERE o.processId = m.processId")
-    fun getOperatorsByProcess(machineId: Int): LiveData<List<DbOperator>>
+    suspend fun getOperatorsByProcess(machineId: Int): List<DbOperator>
 
     @Query("SELECT * FROM operator_table WHERE id = :id")
     fun getOperator(id: Int): LiveData<DbOperator>

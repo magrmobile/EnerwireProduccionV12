@@ -72,13 +72,4 @@ class StopsFragment : BaseFragment<StopsViewModel>()  {
 
         return binding.root
     }
-
-    /*fun refreshAdapter() {
-        binding.rvStopsGrid.adapter?.notifyDataSetChanged()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        refreshAdapter()
-    }*/
 }

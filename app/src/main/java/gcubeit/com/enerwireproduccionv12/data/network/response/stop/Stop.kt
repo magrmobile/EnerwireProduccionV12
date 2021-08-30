@@ -17,8 +17,8 @@ data class Stop(
     val comment: String?,
     @SerializedName("stop_datetime_start") val stopDatetimeStart: String,
     @SerializedName("stop_datetime_end") val stopDatetimeEnd: String,
-    @SerializedName("created_at") val createdAt: String,
-    @SerializedName("updated_at") val updatedAt: String
+    @SerializedName("created_at") val createdAt: String?,
+    @SerializedName("updated_at") val updatedAt: String?
 )
 
 fun List<Stop>.asDatabaseModel(): List<DbStop> {

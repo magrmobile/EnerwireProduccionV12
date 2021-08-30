@@ -8,10 +8,11 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @DelicateCoroutinesApi
 class EditViewModelFactory(
     private val application: Application,
-    private val machineId: Int? = null
+    private val machineId: Int? = null,
+    private val processId: Int? = null
 ): ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return EditViewModel(application, machineId) as T
+        return EditViewModel(application, machineId, processId) as T
     }
 }

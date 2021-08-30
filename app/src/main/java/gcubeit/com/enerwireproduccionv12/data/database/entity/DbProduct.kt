@@ -7,14 +7,10 @@ import gcubeit.com.enerwireproduccionv12.data.network.response.product.Product
 
 @Entity(tableName = "product_table")
 data class DbProduct(
-    @PrimaryKey(autoGenerate = false)
-    val id: Int,
-    @SerializedName("metal_type")
-    val metalType: String,
-    @SerializedName("process_id")
-    val processId: Int,
-    @SerializedName("product_name")
-    val productName: String,
+    @PrimaryKey(autoGenerate = false) val id: Int,
+    @SerializedName("metal_type") val metalType: String,
+    @SerializedName("process_id") val processId: Int,
+    @SerializedName("product_name") val productName: String,
     val stock: String?
 )
 

@@ -59,12 +59,12 @@ class StopNetworkDatasourceImpl(
                 stopId = stop.id,
                 operatorId = stop.operatorId,
                 machineId = stop.machineId,
-                productId = stop.productId!!,
-                colorId = stop.colorId!!,
+                productId = stop.productId,
+                colorId = stop.colorId,
                 codeId = stop.codeId,
                 conversionId = stop.conversionId,
                 quantity = stop.quantity,
-                meters = stop.meters!!.toFloat(),
+                meters = stop.meters,
                 comment = stop.comment
             )
         } catch (e: NoConnectivityException) {

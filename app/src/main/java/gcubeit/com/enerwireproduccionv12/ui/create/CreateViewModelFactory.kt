@@ -9,10 +9,11 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @DelicateCoroutinesApi
 class CreateViewModelFactory(
     private val application: Application,
-    private val machineId: Int? = null
+    private val machineId: Int? = null,
+    private val processId: Int? = null
 ): ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return CreateViewModel(application, machineId) as T
+        return CreateViewModel(application, machineId, processId) as T
     }
 }

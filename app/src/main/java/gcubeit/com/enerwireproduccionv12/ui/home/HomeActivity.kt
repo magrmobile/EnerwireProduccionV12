@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -26,6 +27,7 @@ import org.kodein.di.android.closestKodein
 import org.kodein.di.generic.instance
 import kotlin.coroutines.CoroutineContext
 
+@DelicateCoroutinesApi
 class HomeActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
     private lateinit var binding: ActivityHomeBinding
 
@@ -38,13 +40,19 @@ class HomeActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
 
     private val homeViewModelFactory: HomeViewModelFactory by instance()
     private val userPreferences: UserPreferences by instance()
+
     private val connectivityInterceptor: ConnectivityInterceptor by instance()
 
     private lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         job = SupervisorJob()
+
+        /*launch {
+            Toast.makeText(applicationContext, userPreferences.lastStopDateTimeStart.first().toString(), Toast.LENGTH_SHORT).show()
+        }*/
 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -100,7 +108,7 @@ class HomeActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
                         add(
                             it.processId,
                             it.id,
-                            Menu.NONE,
+                            it.processId,
                             it.machineName
                         ).setIcon(R.drawable.ic_machine)
                     }

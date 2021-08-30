@@ -33,7 +33,8 @@ import kotlin.coroutines.CoroutineContext
 @Suppress("DEPRECATION")
 class StopsAdapter(
     private val context: Context,
-    private val stopsViewModel: StopsViewModel
+    private val stopsViewModel: StopsViewModel,
+    private val processId: Int? = null
 ): RecyclerView.Adapter<StopsAdapter.StopViewHolder>(), CoroutineScope, KodeinAware {
     override val kodein by closestKodein(context)
 
@@ -72,10 +73,11 @@ class StopsAdapter(
                 stop = stop.dbStop!!,
                 machineId = stop.dbStop.machineId,
                 operatorId = stop.dbStop.operatorId,
-                processId = stop.dbMachine!!.processId,
+                processId = stop.dbMachine.processId,
                 title = stop.dbMachine.machineName,
                 productName = productName
             )
+            //Toast.makeText(context, stop.toString(), Toast.LENGTH_LONG).show()
         }
 
         binding.btnDelete.setOnClickListener {
@@ -138,7 +140,7 @@ class StopsAdapter(
                     binding.tvGridSchedule.text = "N"
                 }
 
-                binding.tvGridOperator.text = this.dbOperator?.name
+                binding.tvGridOperator.text = this.dbOperator.name
                 binding.tvGridStartStop.text = dateStart[1]
                 binding.tvGridEndStop.text = dateEnd[1]
 
@@ -147,9 +149,10 @@ class StopsAdapter(
                 } else {
                     binding.tvGridProduct.text = ""
                 }
-                binding.tvGridCode.text = this.dbStop.codeId.toString()
 
-                if(this.dbMachine!!.processId == 1 || this.dbMachine.processId == 3) {
+                binding.tvGridCode.text = this.dbCode!!.code.toString()
+
+                if(this.dbMachine.processId == 1 || this.dbMachine.processId == 3) {
                     binding.tvGridPacking.visible(false)
                     binding.tvGridQuantity.visible(false)
                 } else {

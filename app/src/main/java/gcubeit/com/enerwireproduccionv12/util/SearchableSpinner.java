@@ -173,15 +173,16 @@ public class SearchableSpinner extends AppCompatSpinner implements View.OnTouchL
                 _isDirty = true;
                 setAdapter(_arrayAdapter);
                 int index = 0;
-                for (int i = 0; i < getAdapter().getCount(); i++) {
+                for (int i = 0; i <= getAdapter().getCount() + 1; i++) {
                     if(key.equals(Objects.requireNonNull(_arrayAdapter.getItem(i)).toString())){
+                    //if(key == _arrayAdapter.getItem(i).toString()){
                         index = i;
-                        //Toast.makeText(_context, Integer.toString(index), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(_context, Integer.toString(getAdapter().getCount()), Toast.LENGTH_SHORT).show();
                         break;
                     }
                 }
-                super.setSelection(index);
                 //Toast.makeText(_context, _arrayAdapter.getItem(position).toString(), Toast.LENGTH_SHORT).show();
+                super.setSelection(index);
             }
         }
     }
