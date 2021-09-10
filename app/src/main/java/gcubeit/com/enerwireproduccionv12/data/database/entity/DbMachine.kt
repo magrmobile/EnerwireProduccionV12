@@ -13,7 +13,9 @@ data class DbMachine(
     val machineName: String,
     @SerializedName("process_id")
     val processId: Int,
-    val warehouse: String?
+    val warehouse: String?,
+    val lastOperatorId: Int = -1,
+    val lastProductId: Int = -1
 )
 
 fun List<DbMachine>.asDomainModel(): List<Machine> {

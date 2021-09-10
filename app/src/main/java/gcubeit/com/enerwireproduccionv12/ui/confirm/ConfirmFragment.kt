@@ -1,6 +1,8 @@
 package gcubeit.com.enerwireproduccionv12.ui.confirm
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,17 +10,22 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import gcubeit.com.enerwireproduccionv12.NavAppDirections
+import gcubeit.com.enerwireproduccionv12.data.Resource
 import gcubeit.com.enerwireproduccionv12.data.database.UserPreferences
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop
+import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptor
+import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptorImpl
 import gcubeit.com.enerwireproduccionv12.databinding.ConfirmFragmentBinding
 import gcubeit.com.enerwireproduccionv12.databinding.StopsFragmentBinding
 import gcubeit.com.enerwireproduccionv12.ui.stops.StopsFragment
 import gcubeit.com.enerwireproduccionv12.ui.stops.StopsViewModel
+import gcubeit.com.enerwireproduccionv12.util.handleApiError
 import gcubeit.com.enerwireproduccionv12.util.visible
 import kotlinx.coroutines.*
 import org.kodein.di.KodeinAware
@@ -38,6 +45,7 @@ class ConfirmFragment : Fragment(), CoroutineScope, KodeinAware {
         get() = job + Dispatchers.Main
 
     private val userPreferences: UserPreferences by instance()
+    private lateinit var connectivityInterceptor: ConnectivityInterceptorImpl
 
     private val args by navArgs<ConfirmFragmentArgs>()
 
@@ -62,6 +70,8 @@ class ConfirmFragment : Fragment(), CoroutineScope, KodeinAware {
         confirmViewModelFactory = ConfirmViewModelFactory(application)
         viewModel = ViewModelProvider(this, confirmViewModelFactory).get(ConfirmViewModel::class.java)
 
+        binding.confirmProgressBar.visible(false)
+
         binding.btnBack.setOnClickListener {
             /*if(args.action == 1) {
                 val action = ConfirmFragmentDirections.toCreateFragment(args.machineId, args.dbStop.operatorId, args.processId, args.title)
@@ -73,6 +83,7 @@ class ConfirmFragment : Fragment(), CoroutineScope, KodeinAware {
 
         binding.btnConfirmStop.setOnClickListener {
             if(args.action == 1) {
+                //saveToLocalStorage(args.dbStop)
                 addStop(args.dbStop)
                 //Toast.makeText(requireContext(), args.dbStop.toString(), Toast.LENGTH_LONG).show()
             }
@@ -157,11 +168,9 @@ class ConfirmFragment : Fragment(), CoroutineScope, KodeinAware {
         return binding.root
     }
 
-    private fun addStop(stop: DbStop) {
+    fun addStop(stop: DbStop) {
         viewModel.addStop(stop)
-        //viewModel.localAddStop(stop)
         Toast.makeText(requireContext(), "Paro Insertado Satisfactoriamente", Toast.LENGTH_LONG).show()
-
         val action = ConfirmFragmentDirections.actionConfirmFragmentToStopsFragment(args.machineId, args.processId, args.title)
         findNavController().navigate(action)
     }
@@ -172,5 +181,6 @@ class ConfirmFragment : Fragment(), CoroutineScope, KodeinAware {
 
         val action = ConfirmFragmentDirections.actionConfirmFragmentToStopsFragment(args.machineId, args.processId, args.title)
         findNavController().navigate(action)
+        //Toast.makeText(requireContext(), stop.toString(), Toast.LENGTH_LONG).show()
     }
 }

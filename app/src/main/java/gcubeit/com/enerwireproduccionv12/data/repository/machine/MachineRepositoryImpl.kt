@@ -6,12 +6,14 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import gcubeit.com.enerwireproduccionv12.data.database.DbMachineDao
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbMachine
+import gcubeit.com.enerwireproduccionv12.data.database.entity.DbProduct
 import gcubeit.com.enerwireproduccionv12.data.network.datasource.machine.MachineNetworkDatasource
 import gcubeit.com.enerwireproduccionv12.data.network.response.machine.MachinesResponse
 import gcubeit.com.enerwireproduccionv12.data.network.response.machine.asDatabaseModel
 import gcubeit.com.enerwireproduccionv12.data.repository.BaseRepository
 import gcubeit.com.enerwireproduccionv12.util.getIMEIDeviceId
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -19,7 +21,8 @@ import java.util.*
 class MachineRepositoryImpl(
     private val dbMachineDao: DbMachineDao,
     private val machineNetworkDatasource: MachineNetworkDatasource,
-    context: Context
+    context: Context,
+    private val machineId: Int? = null
 ): BaseRepository(), MachineRepository {
     private val serial = getIMEIDeviceId(context)
 
@@ -58,5 +61,31 @@ class MachineRepositoryImpl(
     private fun isFetchCurrentNeeded(lastFetchTime: ZonedDateTime): Boolean {
         val thirtyMinutesAgo = ZonedDateTime.now().minusMinutes(30)
         return lastFetchTime.isBefore(thirtyMinutesAgo)
+    }
+
+    override suspend fun getLastOperatorId(machineId: Int): Int {
+        return withContext(Dispatchers.IO) {
+            return@withContext dbMachineDao.getLastOperatorId(machineId)
+        }
+    }
+
+    override fun updateLastOperatorId(machineId: Int, operatorId: Int) {
+        /*return withContext(Dispatchers.IO) {
+            return@withContext dbMachineDao.updateOperatorId(machineId, operatorId)
+        }*/
+        dbMachineDao.updateOperatorId(machineId, operatorId)
+    }
+
+    override suspend fun getLastProductId(machineId: Int): DbProduct {
+        return withContext(Dispatchers.IO) {
+            return@withContext dbMachineDao.getLastProductId(machineId)
+        }
+    }
+
+    override fun updateLastProductId(machineId: Int, productId: Int) {
+        /*return withContext(Dispatchers.IO) {
+            return@withContext dbMachineDao.updateOperatorId(machineId, operatorId)
+        }*/
+        dbMachineDao.updateProductId(machineId, productId)
     }
 }

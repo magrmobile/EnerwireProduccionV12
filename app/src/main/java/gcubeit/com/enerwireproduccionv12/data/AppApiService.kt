@@ -2,6 +2,8 @@ package gcubeit.com.enerwireproduccionv12.data
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptor
+import gcubeit.com.enerwireproduccionv12.data.network.response.RemoteResponse
+import gcubeit.com.enerwireproduccionv12.data.network.response.SimpleResponse
 import gcubeit.com.enerwireproduccionv12.data.network.response.code.CodesResponse
 import gcubeit.com.enerwireproduccionv12.data.network.response.color.ColorsResponse
 import gcubeit.com.enerwireproduccionv12.data.network.response.conversion.ConversionsResponse
@@ -15,6 +17,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -61,7 +64,7 @@ interface AppApiService {
 
     @POST("stops")
     @Headers("Accept: application/json")
-    suspend fun addStop(
+    fun addStop(
         @Query("operator_id") operatorId: Int,
         @Query("machine_id") machineId: Int,
         @Query("product_id") productId: Int?,
@@ -70,12 +73,15 @@ interface AppApiService {
         @Query("conversion_id") conversionId: Int?,
         @Query("quantity") quantity: Int?,
         @Query("meters") meters: Float?,
-        @Query("comment") comment: String?
-    ): Response<ResponseBody>
+        @Query("comment") comment: String?,
+        @Query("stop_datetime_start") stopDateTimeStart: String,
+        @Query("stop_datetime_end") stopDateTimeEnd: String,
+        @Query("type") type: Int = 1
+    ): Call<RemoteResponse>
 
     @PUT("stops/{stop_id}")
     @Headers("Accept: application/json")
-    suspend fun updateStop(
+    fun updateStop(
         @Path("stop_id") stopId: Int,
         @Query("operator_id") operatorId: Int,
         @Query("machine_id") machineId: Int,
@@ -86,12 +92,12 @@ interface AppApiService {
         @Query("quantity") quantity: Int?,
         @Query("meters") meters: Float?,
         @Query("comment") comment: String?
-    ): Response<ResponseBody>
+    ): Call<SimpleResponse>
 
     companion object {
-        private const val BASE_URL = "http://134.122.113.150/api/"    // Digital Ocean Server
+        //private const val BASE_URL = "http://134.122.113.150/api/"    // Digital Ocean Server
         //private const val BASE_URL = "http://172.16.0.206/api/"         // Raspberry Local
-        //private const val BASE_URL = "http://192.168.50.8/api/"         // Server Local
+        private const val BASE_URL = "http://192.168.50.8/api/"         // Server Local
 
         operator fun invoke(
             connectivityInterceptor: ConnectivityInterceptor,

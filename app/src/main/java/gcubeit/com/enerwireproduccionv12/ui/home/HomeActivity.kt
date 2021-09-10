@@ -5,27 +5,34 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import gcubeit.com.enerwireproduccionv12.NavAppDirections
 import gcubeit.com.enerwireproduccionv12.R
 import gcubeit.com.enerwireproduccionv12.data.AppApiService
+import gcubeit.com.enerwireproduccionv12.data.database.DbStopDao
 import gcubeit.com.enerwireproduccionv12.data.database.UserPreferences
+import gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop
+import gcubeit.com.enerwireproduccionv12.data.network.ConnectionLiveData
 import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptor
+import gcubeit.com.enerwireproduccionv12.data.network.response.RemoteResponse
+import gcubeit.com.enerwireproduccionv12.data.network.response.SimpleResponse
+import gcubeit.com.enerwireproduccionv12.data.repository.stop.StopRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.databinding.ActivityHomeBinding
 import gcubeit.com.enerwireproduccionv12.ui.login.LoginActivity
 import gcubeit.com.enerwireproduccionv12.util.startNewActivity
+import gcubeit.com.enerwireproduccionv12.util.visible
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 import org.kodein.di.generic.instance
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.coroutines.CoroutineContext
+
 
 @DelicateCoroutinesApi
 class HomeActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
@@ -40,15 +47,43 @@ class HomeActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
 
     private val homeViewModelFactory: HomeViewModelFactory by instance()
     private val userPreferences: UserPreferences by instance()
+    private val dbStopDao: DbStopDao by instance()
+    private val stopRepository: StopRepositoryImpl by instance()
 
     private val connectivityInterceptor: ConnectivityInterceptor by instance()
 
     private lateinit var viewModel: HomeViewModel
 
+    lateinit var connectionLiveData: ConnectionLiveData
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        connectionLiveData = ConnectionLiveData(this)
         super.onCreate(savedInstanceState)
 
         job = SupervisorJob()
+
+        connectionLiveData.observe(this, Observer{ isNetworkAvailable ->
+            if(!isNetworkAvailable) {
+                binding.tvConnectionStatus.visible(true)
+                binding.tvConnectionStatus.text = "No hay conexion"
+            } else {
+                binding.tvConnectionStatus.visible(false)
+                launch(Dispatchers.IO) {
+                    val stops = dbStopDao.getAllStopsUnSync()
+                    stops.forEach { stop ->
+                        when(stop.sync_status) {
+                            1 -> {
+                                addStop(stop)
+                            }
+                            2 -> {
+                                updateStop(stop)
+                            }
+                        }
+
+                    }
+                }
+            }
+        })
 
         /*launch {
             Toast.makeText(applicationContext, userPreferences.lastStopDateTimeStart.first().toString(), Toast.LENGTH_SHORT).show()
@@ -149,5 +184,72 @@ class HomeActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
     override fun onDestroy() {
         job.cancel()
         super.onDestroy()
+    }
+
+    fun addStop(stop: DbStop) {
+        val api = AppApiService(connectivityInterceptor)
+        val call = api.addStop(
+            operatorId = stop.operatorId,
+            machineId = stop.machineId,
+            productId = stop.productId,
+            colorId = stop.colorId,
+            codeId = stop.codeId,
+            conversionId = stop.conversionId,
+            quantity = stop.quantity,
+            meters = stop.meters,
+            comment = stop.comment,
+            stopDateTimeStart = stop.stopDatetimeStart,
+            stopDateTimeEnd = stop.stopDatetimeEnd
+        )
+        call.enqueue(object : Callback<RemoteResponse> {
+            override fun onFailure(call: Call<RemoteResponse>, t: Throwable) {
+                Toast.makeText(this@HomeActivity, t.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<RemoteResponse>,
+                response: Response<RemoteResponse>
+            ) {
+                if(response.isSuccessful)  {
+                    stop.idRemote = response.body()?.id!!
+                    launch(Dispatchers.IO) {
+                        stop.idRemote.let { dbStopDao.updateSyncStatus(stop.id, it) }
+                    }
+                }
+            }
+        })
+    }
+
+    fun updateStop(stop: DbStop) {
+        val api = AppApiService(connectivityInterceptor)
+        val call = api.updateStop(
+            stopId = stop.idRemote,
+            operatorId = stop.operatorId,
+            machineId = stop.machineId,
+            productId = stop.productId,
+            colorId = stop.colorId,
+            codeId = stop.codeId,
+            conversionId = stop.conversionId,
+            quantity = stop.quantity,
+            meters = stop.meters,
+            comment = stop.comment
+        )
+        call.enqueue(object : Callback<SimpleResponse> {
+            override fun onFailure(call: Call<SimpleResponse>, t: Throwable) {
+                Toast.makeText(this@HomeActivity, t.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<SimpleResponse>,
+                response: Response<SimpleResponse>
+            ) {
+                if(response.isSuccessful)  {
+                    //stop.idRemote = response.body()?.id!!
+                    launch(Dispatchers.IO) {
+                        stop.idRemote.let { dbStopDao.updateSyncStatus(stop.id, it) }
+                    }
+                }
+            }
+        })
     }
 }

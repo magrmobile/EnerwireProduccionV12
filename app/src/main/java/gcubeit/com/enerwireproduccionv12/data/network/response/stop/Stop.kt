@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop
 
 data class Stop(
-    val id: Int,
+    @SerializedName("id") val idRemote: Int,
     @SerializedName("machine_id") val machineId: Int,
     @SerializedName("operator_id") val operatorId: Int,
     @SerializedName("product_id") val productId: Int?,
@@ -16,15 +16,13 @@ data class Stop(
     val meters: Float?,
     val comment: String?,
     @SerializedName("stop_datetime_start") val stopDatetimeStart: String,
-    @SerializedName("stop_datetime_end") val stopDatetimeEnd: String,
-    @SerializedName("created_at") val createdAt: String?,
-    @SerializedName("updated_at") val updatedAt: String?
+    @SerializedName("stop_datetime_end") val stopDatetimeEnd: String
 )
 
 fun List<Stop>.asDatabaseModel(): List<DbStop> {
     return map {
         DbStop (
-            id = it.id,
+            idRemote = it.idRemote,
             machineId = it.machineId,
             operatorId = it.operatorId,
             productId = it.productId,
@@ -35,9 +33,7 @@ fun List<Stop>.asDatabaseModel(): List<DbStop> {
             meters = it.meters,
             comment = it.comment,
             stopDatetimeStart = it.stopDatetimeStart,
-            stopDatetimeEnd = it.stopDatetimeEnd,
-            createdAt = it.createdAt,
-            updatedAt = it.updatedAt
+            stopDatetimeEnd = it.stopDatetimeEnd
         )
     }
 }

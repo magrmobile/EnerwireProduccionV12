@@ -17,7 +17,7 @@ import gcubeit.com.enerwireproduccionv12.data.database.entity.*
         DbConversion::class,
         DbStop::class
     ],
-    version = 2,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase: RoomDatabase() {

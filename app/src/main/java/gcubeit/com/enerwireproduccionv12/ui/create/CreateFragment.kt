@@ -80,6 +80,14 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
         createViewModelFactory = CreateViewModelFactory(application, args.machineId, args.processId)
         viewModel = ViewModelProvider(this, createViewModelFactory).get(CreateViewModel::class.java)
 
+        /*launch {
+            Toast.makeText(
+                requireContext(),
+                viewModel.lastOperatorId.await().toString(),
+                Toast.LENGTH_LONG
+            ).show()
+        }*/
+
         bindUI()
 
         //Toast.makeText(requireContext(), args.processId.toString(), Toast.LENGTH_LONG).show()
@@ -123,9 +131,17 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
                     0 -> {
                         binding.tvProduct.visible(true)
                         binding.spinnerProduct.visible(true)
-                        /*if(productId!! > 0) {
-                            s1.spinnerProduct.setSelectionP(productId, productName)
-                        }*/
+                        launch {
+                            val lastProduct = viewModel.lastProductId.await()
+                            if(lastProduct != null) {
+                                if (lastProduct.id > 0) {
+                                    binding.spinnerProduct.setSelectionP(
+                                        lastProduct.id,
+                                        lastProduct.productName
+                                    )
+                                }
+                            }
+                        }
                         binding.tvColor.visible(true)
                         binding.spinnerColor.visible(true)
                         //spinnerColor.setSelection(-1)
@@ -185,21 +201,23 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
 
             binding.spinnerOperator.adapter = operatorsAdapter
 
-            if(args.operatorId > 0) {
-                var index = 0
-                for(i in 0 until binding.spinnerOperator.count) {
-                    val operator = binding.spinnerOperator.getItemAtPosition(i) as Operator
-                    if(operator.id == args.operatorId) {
-                        index = i
-                        break
-                    }
+            //if(args.operatorId > 0) {
+        val lastOperatorId = viewModel.lastOperatorId.await()
+        if (lastOperatorId > 0) {
+            var index = 0
+            for (i in 0 until binding.spinnerOperator.count) {
+                val operator = binding.spinnerOperator.getItemAtPosition(i) as Operator
+                if (operator.id == lastOperatorId) {
+                    index = i
+                    break
                 }
-                binding.spinnerOperator.setSelection(index)
             }
+            binding.spinnerOperator.setSelection(index)
+        }
         //})
     }
 
-    private fun loadProducts() = lifecycleScope.launch {
+    private fun loadProducts() = lifecycleScope.launch() {
         val products = viewModel.productsByProcess.await()
 
         //products.observe(viewLifecycleOwner, { data ->
@@ -218,6 +236,19 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
             )
 
             binding.spinnerProduct.adapter = productsAdapter
+
+
+            /*if(code.code != null) {
+                if(code.code == 0) {
+                    val lastProductId = viewModel.lastProductId.await()
+                    if (lastProductId.id > 0) {
+                        binding.spinnerProduct.setSelectionP(
+                            lastProductId.id,
+                            lastProductId.productName
+                        )
+                    }
+                }
+            }*/
         //})
     }
 
@@ -264,7 +295,7 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
     private fun getLastStopDateTime() = lifecycleScope.launch {
         var lastLogin = ""
 
-        val lastDateTime = viewModel.lastStopDateTime
+        val lastDateTime = viewModel.lastStopDateTime.await()
 
         userPreferences.lastStopDateTimeStart.asLiveData().observe(viewLifecycleOwner) {
             lastLogin = it
@@ -295,7 +326,7 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
         })
 
         binding.tvConfirmEndDateStop.text = SimpleDateFormat("dd MMMM, y ").format(Date())
-        binding.hiddenEndDateTimeStop.text = SimpleDateFormat("yyyy-mm-dd HH:mm:ss").format(Date())
+        binding.hiddenEndDateTimeStop.text = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
     }
 
     private fun bindUI() {
@@ -312,8 +343,20 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
 
             override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val operator = adapter?.getItemAtPosition(position) as Operator
-                //this@CreateFragment.arguments?.putInt("operatorId", operator.id)
-                //Toast.makeText(requireContext(), operator.id.toString(), Toast.LENGTH_SHORT).show()
+                launch(Dispatchers.IO) {
+                    viewModel.updateLastOperatorId(args.machineId, operator.id)
+                }
+            }
+        }
+
+        binding.spinnerProduct.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+            override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val product = adapter?.getItemAtPosition(position) as Product
+                launch(Dispatchers.IO) {
+                    viewModel.updateLastProductId(args.machineId, product.id)
+                }
             }
         }
 
@@ -489,7 +532,6 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
         val stopDateTimeEnd = binding.hiddenEndDateTimeStop.text.toString()
 
         return DbStop(
-            id = 0,
             machineId = args.machineId,
             operatorId = operatorId,
             productId = productId,
@@ -500,9 +542,7 @@ class CreateFragment : Fragment(), CoroutineScope, KodeinAware {
             meters = meters,
             comment = comment,
             stopDatetimeStart = stopDateTimeStart,
-            stopDatetimeEnd = stopDateTimeEnd,
-            null,
-            null
+            stopDatetimeEnd = stopDateTimeEnd
         )
     }
 

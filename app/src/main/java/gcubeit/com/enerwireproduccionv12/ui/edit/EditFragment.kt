@@ -301,7 +301,7 @@ class EditFragment : Fragment(), CoroutineScope, KodeinAware {
     private fun getLastStopDateTime() = lifecycleScope.launch {
         var lastLogin = ""
 
-        val lastDateTime = viewModel.lastStopDateTime
+        val lastDateTime = viewModel.lastStopDateTime.await()
 
         userPreferences.lastStopDateTimeStart.asLiveData().observe(viewLifecycleOwner) {
             lastLogin = it
@@ -542,6 +542,7 @@ class EditFragment : Fragment(), CoroutineScope, KodeinAware {
 
         return DbStop(
             id = args.currentStop.id,
+            idRemote = args.currentStop.idRemote,
             machineId = args.machineId,
             operatorId = operatorId,
             productId = productId,
@@ -551,10 +552,8 @@ class EditFragment : Fragment(), CoroutineScope, KodeinAware {
             quantity = quantity,
             meters = meters,
             comment = comment,
-            "",
-            "",
-            "",
-            ""
+            stopDatetimeStart = args.currentStop.stopDatetimeStart,
+            stopDatetimeEnd = args.currentStop.stopDatetimeEnd
         )
     }
 

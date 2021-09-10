@@ -54,5 +54,5 @@ class ProductRepositoryImpl(
         return lastFetchTime.isBefore(thirtyMinutesAgo)
     }
 
-    suspend fun getProductsByProcess(processId: Int): List<DbProduct> = dbProductDao.getProductsByProcess(processId)
+    fun getProductsByProcess(processId: Int): List<DbProduct> = dbProductDao.getProductsByProcess(processId)
 }

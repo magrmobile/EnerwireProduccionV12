@@ -4,8 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import gcubeit.com.enerwireproduccionv12.data.AppApiService
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop
+import gcubeit.com.enerwireproduccionv12.data.network.response.RemoteResponse
 import gcubeit.com.enerwireproduccionv12.data.network.response.stop.StopsResponse
 import gcubeit.com.enerwireproduccionv12.util.NoConnectivityException
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Response
 import timber.log.Timber
 
 class StopNetworkDatasourceImpl(
@@ -46,12 +50,15 @@ class StopNetworkDatasourceImpl(
                 conversionId = stop.conversionId,
                 quantity = stop.quantity,
                 meters = stop.meters,
-                comment = stop.comment
+                comment = stop.comment,
+                stopDateTimeStart = stop.stopDatetimeStart,
+                stopDateTimeEnd = stop.stopDatetimeEnd
             )
         } catch (e: NoConnectivityException) {
             Timber.e(e, "No Internet Connection.")
         }
     }
+
 
     override suspend fun updateStop(stop: DbStop) {
         try {

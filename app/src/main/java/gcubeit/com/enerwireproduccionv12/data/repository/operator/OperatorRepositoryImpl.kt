@@ -56,5 +56,5 @@ class OperatorRepositoryImpl(
         return lastFetchTime.isBefore(thirtyMinutesAgo)
     }
 
-    suspend fun getOperatorsByProcess(machineId: Int): List<DbOperator> = dbOperatorDao.getOperatorsByProcess(machineId)
+    fun getOperatorsByProcess(machineId: Int): List<DbOperator> = dbOperatorDao.getOperatorsByProcess(machineId)
 }

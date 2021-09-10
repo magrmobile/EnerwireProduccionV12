@@ -52,5 +52,5 @@ class EditViewModel(
     val productsByProcess by lazyDeferred {  productRepository.getProductsByProcess(processId!!) }
     val operatorsByProcess by lazyDeferred { operatorRepository.getOperatorsByProcess(machineId!!) }
 
-    val lastStopDateTime = stopRepository.getLastStopDateTime(machineId!!)
+    val lastStopDateTime by lazyDeferred { stopRepository.getLastStopDateTime(machineId!!) }
 }

@@ -10,8 +10,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import gcubeit.com.enerwireproduccionv12.data.AppApiService
 import gcubeit.com.enerwireproduccionv12.data.database.DbStopDao
 import gcubeit.com.enerwireproduccionv12.data.network.datasource.stop.StopNetworkDatasource
+import gcubeit.com.enerwireproduccionv12.data.network.datasource.stop.StopNetworkDatasourceImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.stop.StopRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.databinding.StopsFragmentBinding
 import gcubeit.com.enerwireproduccionv12.ui.base.BaseFragment
@@ -28,8 +30,9 @@ class StopsFragment : BaseFragment<StopsViewModel>()  {
 
     private lateinit var binding: StopsFragmentBinding
 
+    private val api: AppApiService by instance()
     private val dbStopDao : DbStopDao by instance()
-    private val stopNetworkDatasource : StopNetworkDatasource by instance()
+    private val stopNetworkDatasource : StopNetworkDatasourceImpl by instance()
 
     private lateinit var stopRepository: StopRepositoryImpl
     private lateinit var stopsViewModelFactory: StopsViewModelFactory
@@ -41,7 +44,7 @@ class StopsFragment : BaseFragment<StopsViewModel>()  {
         binding = StopsFragmentBinding.inflate(inflater, container, false)
 
         // StopsViewModel
-        stopRepository = StopRepositoryImpl(dbStopDao, stopNetworkDatasource, userPreferences)
+        stopRepository = StopRepositoryImpl(api, dbStopDao, stopNetworkDatasource)
         stopsViewModelFactory = StopsViewModelFactory(stopRepository, args.machineId)
         viewModel = ViewModelProvider(this, stopsViewModelFactory).get(StopsViewModel::class.java)
 

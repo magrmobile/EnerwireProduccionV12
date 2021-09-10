@@ -3,6 +3,8 @@ package gcubeit.com.enerwireproduccionv12.ui.dashboard
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import gcubeit.com.enerwireproduccionv12.data.database.views.StopsDashboard
 import gcubeit.com.enerwireproduccionv12.databinding.CardInfoRowBinding
@@ -24,16 +26,18 @@ class DashboardAdapter: RecyclerView.Adapter<DashboardAdapter.DashboardViewHolde
     override fun onBindViewHolder(holder: DashboardViewHolder, position: Int) {
         with(holder) {
             with(dashboardList[position]) {
+                binding.machineId.text = this.machineId.toString()
                 binding.machineName.text = this.machineName
                 var processName = ""
 
                 when(this.processId) {
                     1 -> { processName = "Cableado" }
                     2 -> { processName = "Extrusion" }
-                    3 -> { processName = "Fraccionado" }
-                    4 -> { processName = "Trefilado"}
+                    3 -> { processName = "Trefilado" }
+                    4 -> { processName = "Fraccionado"}
                 }
 
+                binding.processId.text = this.processId.toString()
                 binding.processName.text = processName
 
                 val startDateTime = this.lastStopDateTimeEnd.split(" ")
@@ -45,8 +49,16 @@ class DashboardAdapter: RecyclerView.Adapter<DashboardAdapter.DashboardViewHolde
                 binding.lastStopDateTime.text = "$formattedDate $formattedTime"
 
                 binding.quantityStops.text = "${this.quantityStops} Paros"
+
+                binding.cardInfo.setOnClickListener {
+                    val machineId = binding.machineId.text.toString().toInt()
+                    val processId = binding.processId.text.toString().toInt()
+                    val action = DashboardFragmentDirections.toStopsFragment(machineId, processId, this.machineName)
+                    it.findNavController().navigate(action)
+                }
             }
         }
+
     }
 
     override fun getItemCount() = dashboardList.size

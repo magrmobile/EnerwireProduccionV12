@@ -14,14 +14,17 @@ interface DbStopDao {
     @Query("SELECT * FROM stop_table")
     fun getAllStops(): LiveData<List<DbStop>>
 
+    @Query("SELECT * FROM stop_table WHERE sync_status IN (1, 2)")
+    fun getAllStopsUnSync(): List<DbStop>
+
     @Query("SELECT * FROM stop_table WHERE id = :id")
     fun getStop(id: Int): LiveData<DbStop>
 
     @Transaction
-    @Query("SELECT * FROM stop_table WHERE machineId = :machineId")
+    @Query("SELECT * FROM stop_table WHERE machineId = :machineId ORDER BY id ASC")
     fun getStopsByMachine(machineId: Int): LiveData<List<StopsDetails>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insert(stop: DbStop)
 
     @Query("DELETE FROM stop_table")
@@ -33,8 +36,14 @@ interface DbStopDao {
     @Query("SELECT MAX(stopDatetimeEnd) AS lastStopDateTime from stop_table WHERE machineId = :machineId")
     fun getLastStopDateTime(machineId: Int): LiveData<String>
 
-    @Query("SELECT m.machineName, m.processId, MAX(s.stopDatetimeEnd) AS lastStopDateTimeEnd, COUNT(*) quantityStops FROM stop_table AS s JOIN machine_table AS m ON m.id = s.machineId GROUP BY m.machineName, m.processId")
+    @Query("SELECT m.id AS machineId, m.machineName, m.processId, MAX(s.stopDatetimeEnd) AS lastStopDateTimeEnd, COUNT(*) quantityStops, SUM(CASE WHEN sync_status = 0 THEN 1 ELSE 0 END) quantityLocal FROM stop_table AS s JOIN machine_table AS m ON m.id = s.machineId GROUP BY m.id, m.machineName, m.processId")
     fun getStopsDashboard(): LiveData<List<StopsDashboard>>
+
+    @Query("UPDATE stop_table SET sync_status = 0, idRemote = :idRemote WHERE id = :stopId")
+    suspend fun updateSyncStatus(stopId: Int, idRemote: Int)
+
+    @Update
+    suspend fun updateStop(vararg stop: DbStop)
 
     //@Query("SELECT * FROM stop_table")
     //suspend fun getStopAndMachine(): List<StopsDetails>

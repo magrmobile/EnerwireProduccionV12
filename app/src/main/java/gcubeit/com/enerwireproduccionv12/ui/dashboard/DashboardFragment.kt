@@ -35,7 +35,7 @@ class DashboardFragment : BaseFragment<DashboardViewModel>() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         lifecycleScope.launch {
-            viewModel.data.await()
+            //viewModel.data.await()
             val dashboardData = viewModel.dashboardData.await()
             dashboardData.observeForever { data ->
                 dashboardAdapter.setData(data!!)

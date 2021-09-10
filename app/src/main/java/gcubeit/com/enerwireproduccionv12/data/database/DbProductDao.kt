@@ -17,7 +17,7 @@ interface DbProductDao {
 
     //@Query("SELECT p.* FROM product_table AS p JOIN machine_table m ON m.id = :machineId WHERE p.processId = m.processId")
     @Query("SELECT * FROM product_table WHERE processId = :processId")
-    suspend fun getProductsByProcess(processId: Int): List<DbProduct>
+    fun getProductsByProcess(processId: Int): List<DbProduct>
 
     @Query("SELECT * FROM product_table WHERE id = :id")
     fun getProduct(id: Int): LiveData<DbProduct>

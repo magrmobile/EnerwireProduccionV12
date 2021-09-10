@@ -8,10 +8,14 @@ import com.google.gson.annotations.SerializedName
 import gcubeit.com.enerwireproduccionv12.data.network.response.stop.Stop
 import kotlinx.parcelize.Parcelize
 
+const val SYNC_STATUS_OK = 0
+const val SYNC_STATUS_FAILED = 1
+
 @Parcelize
 @Entity(tableName = "stop_table")
 data class DbStop(
-    @PrimaryKey(autoGenerate = false) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @SerializedName("idRemote") var idRemote: Int = 0,
     @SerializedName("machine_id") val machineId: Int,
     @SerializedName("operator_id") val operatorId: Int,
     @SerializedName("product_id") val productId: Int?,
@@ -24,14 +28,13 @@ data class DbStop(
     val comment: String?,
     @SerializedName("stop_datetime_start") val stopDatetimeStart: String,
     @SerializedName("stop_datetime_end") val stopDatetimeEnd: String,
-    @SerializedName("created_at") val createdAt: String?,
-    @SerializedName("updated_at") val updatedAt: String?
+    var sync_status: Int = SYNC_STATUS_FAILED
 ): Parcelable
 
 fun List<DbStop>.asDomainModel(): List<Stop> {
     return map {
         Stop (
-            id = it.id,
+            idRemote = it.idRemote,
             machineId = it.machineId,
             operatorId = it.operatorId,
             productId = it.productId,
@@ -42,9 +45,7 @@ fun List<DbStop>.asDomainModel(): List<Stop> {
             meters = it.meters,
             comment = it.comment,
             stopDatetimeStart = it.stopDatetimeStart,
-            stopDatetimeEnd = it.stopDatetimeEnd,
-            createdAt = it.createdAt,
-            updatedAt = it.updatedAt
+            stopDatetimeEnd = it.stopDatetimeEnd
         )
     }
 }

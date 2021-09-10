@@ -84,16 +84,20 @@ class StopsAdapter(
             val position = holder.adapterPosition.takeIf { it != NO_POSITION } ?: return@setOnClickListener
             showDeleteDialog(
                 holder = holder,
-                stopId = stopsList[position].dbStop!!.id
+                stopId = stopsList[position].dbStop!!.id,
+                stopRemoteId = stopsList[position].dbStop!!.idRemote
             )
         }
         return holder
     }
 
-    private fun deleteStop(stopId: Int) {
+    @SuppressLint("NotifyDataSetChanged")
+    private fun deleteStop(stopId: Int, stopRemoteId: Int? = null) {
         launch {
             dbStopDao.deleteStop(stopId)
-            stopNetworkDatasource.deleteStop(stopId)
+            if (stopRemoteId != null) {
+                stopNetworkDatasource.deleteStop(stopRemoteId)
+            }
         }
         notifyDataSetChanged()
     }
@@ -107,11 +111,11 @@ class StopsAdapter(
         }
     }
 
-    private fun showDeleteDialog(holder: StopViewHolder, stopId: Int) {
+    private fun showDeleteDialog(holder: StopViewHolder, stopId: Int, stopRemoteId: Int? = null) {
         val dialogBuilder = AlertDialog.Builder(holder.binding.root.context)
         dialogBuilder.setTitle("Eliminar")
         dialogBuilder.setMessage("Desea Eliminar?")
-        dialogBuilder.setPositiveButton("Eliminar") { _, _ -> deleteStop(stopId) }
+        dialogBuilder.setPositiveButton("Eliminar") { _, _ -> deleteStop(stopId, stopRemoteId) }
         dialogBuilder.setNegativeButton("Cancelar") { dialog, _ -> dialog.cancel() }
         val dialog = dialogBuilder.create()
         dialog.show()
@@ -121,6 +125,10 @@ class StopsAdapter(
     override fun onBindViewHolder(holder: StopViewHolder, position: Int) {
         with(holder) {
             with(stopsList[position]) {
+                if(this.dbStop?.sync_status == 0) {
+                    binding.ivSync.setImageResource(R.drawable.ic_check_circle)
+                }
+
                 val sdf: DateFormat = SimpleDateFormat("y-MM-dd HH:mm:ss") // or "hh:mm" for 12 hour format
 
                 val datetimeStart = this.dbStop!!.stopDatetimeStart
@@ -200,5 +208,6 @@ class StopsAdapter(
     ) {
         val action = StopsFragmentDirections.actionStopsFragmentToEditFragment(stop, machineId, operatorId, processId, title, productName/*, stop*/)
         holder.itemView.findNavController().navigate(action)
+        //Toast.makeText(context, stop.toString(), Toast.LENGTH_LONG).show()
     }
 }

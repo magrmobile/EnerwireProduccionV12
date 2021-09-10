@@ -1,15 +1,14 @@
 package gcubeit.com.enerwireproduccionv12.ui.create
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbOperator
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbProduct
+import gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop
 import gcubeit.com.enerwireproduccionv12.data.repository.code.CodeRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.color.ColorRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.conversion.ConversionRepositoryImpl
+import gcubeit.com.enerwireproduccionv12.data.repository.machine.MachineRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.operator.OperatorRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.product.ProductRepositoryImpl
 import gcubeit.com.enerwireproduccionv12.data.repository.stop.StopRepositoryImpl
@@ -29,6 +28,7 @@ class CreateViewModel(
 ) : AndroidViewModel(application), KodeinAware {
     override val kodein by closestKodein()
 
+    private val machineRepository: MachineRepositoryImpl by instance()
     private val codeRepository: CodeRepositoryImpl by instance()
     private val colorRepository: ColorRepositoryImpl by instance()
     private val productRepository: ProductRepositoryImpl by instance()
@@ -42,10 +42,17 @@ class CreateViewModel(
     private val _products = MutableLiveData<List<DbProduct>>()
     val products : LiveData<List<DbProduct>> get() = _products
 
+    //private val _lastOperatorId = MutableLiveData<Int>()
+    //val lastOperatorId: LiveData<Int> get() = _lastOperatorId
+
+    val lastOperatorId by lazyDeferred { machineRepository.getLastOperatorId(machineId!!) }
+    val lastProductId by lazyDeferred { machineRepository.getLastProductId(machineId!!) }
+
     init {
         viewModelScope.launch(Dispatchers.Main) {
             _operators.value = operatorRepository.getOperators().value
             _products.value = productRepository.getProducts().value
+            //_lastOperatorId.value = machineRepository.getLastOperatorId(machineId!!)
         }
     }
 
@@ -55,5 +62,13 @@ class CreateViewModel(
     val productsByProcess by lazyDeferred { productRepository.getProductsByProcess(processId!!) }
     val operatorsByProcess by lazyDeferred { operatorRepository.getOperatorsByProcess(machineId!!) }
 
-    val lastStopDateTime = stopRepository.getLastStopDateTime(machineId!!)
+    val lastStopDateTime by lazyDeferred { stopRepository.getLastStopDateTime(machineId!!) }
+
+    fun updateLastOperatorId(machineId: Int, operatorId: Int) {
+        machineRepository.updateLastOperatorId(machineId, operatorId)
+    }
+
+    fun updateLastProductId(machineId: Int, productId: Int) {
+        machineRepository.updateLastProductId(machineId, productId)
+    }
 }
