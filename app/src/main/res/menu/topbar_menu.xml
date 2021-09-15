@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/calculator"
+        android:icon="@drawable/ic_calculate"
+        android:title="Calculator"
+        app:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/tb_homeFragment"
         android:icon="@drawable/ic_home"
         android:title="Home"

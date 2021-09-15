@@ -1,5 +1,6 @@
 package gcubeit.com.enerwireproduccionv12.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -32,6 +33,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import kotlin.coroutines.CoroutineContext
+import android.content.ComponentName
+
+
+
 
 
 @DelicateCoroutinesApi
@@ -167,6 +172,17 @@ class HomeActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
+            R.id.calculator -> {
+                val intent = Intent()
+                intent.action = Intent.ACTION_MAIN
+                intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                intent.component = ComponentName(
+                    "com.android.calculator2",
+                    "com.android.calculator2.Calculator"
+                )
+                startActivity(intent)
+                true
+            }
             R.id.tb_homeFragment -> true
             R.id.tb_logout -> {
                 logout()

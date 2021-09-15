@@ -32,10 +32,14 @@ class ConfirmViewModel (
     private val stopRepository: StopRepositoryImpl by instance()
     private val context by lazy { getApplication<Application>().applicationContext }
 
-    lateinit var connectionLiveData: ConnectionLiveData
+    fun localAddStop(stop: DbStop) {
+        viewModelScope.launch(Dispatchers.IO) {
+            stopRepository.localAddStop(stop)
+        }
+    }
 
     fun addStop(stop: DbStop) {
-        //if(checkNetworkConnection()) {
+        if(checkNetworkConnection()) {
             val call = apiService.addStop(
                 operatorId = stop.operatorId,
                 machineId = stop.machineId,
@@ -52,9 +56,10 @@ class ConfirmViewModel (
             call.enqueue(object : Callback<RemoteResponse> {
                 override fun onFailure(call: Call<RemoteResponse>, t: Throwable) {
                     //Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
-                    viewModelScope.launch() {
+                    /*viewModelScope.launch() {
                         stopRepository.localAddStop(stop)
-                    }
+                    }*/
+                    localAddStop(stop)
                 }
 
                 override fun onResponse(
@@ -65,29 +70,28 @@ class ConfirmViewModel (
                         if(response.body()!!.success) {
                             stop.sync_status = SYNC_STATUS_OK
                             stop.idRemote = response.body()!!.id ?: 0
-                            viewModelScope.launch() {
+                            /*viewModelScope.launch() {
                                 stopRepository.localAddStop(stop)
-                            }
+                            }*/
                         }
                     }
+                    localAddStop(stop)
                 }
-
             })
-        /*} else {
-            viewModelScope.launch() {
-                stopRepository.localAddStop(stop)
-            }
-        }*/
+        } else {
+            localAddStop(stop)
+        }
     }
 
-    /*fun localAddStop(stop: DbStop) {
+    fun localUpdateStop(stop: DbStop) {
         viewModelScope.launch(Dispatchers.IO) {
-            stopRepository.localAddStop(stop)
+            stopRepository.localUpdateStop(stop)
         }
-    }*/
+        //Toast.makeText(getApplication(), stop.toString(), Toast.LENGTH_LONG).show()
+    }
 
     fun updateStop(stop: DbStop) {
-        //if(checkNetworkConnection()) {
+        if(checkNetworkConnection()) {
             if(stop.idRemote > 0) {
                 val call = apiService.updateStop(
                     stopId = stop.idRemote,
@@ -103,15 +107,8 @@ class ConfirmViewModel (
                 )
                 call.enqueue(object : Callback<SimpleResponse> {
                     override fun onFailure(call: Call<SimpleResponse>, t: Throwable) {
-                        viewModelScope.launch() {
-                            if(stop.idRemote > 0) {
-                                stop.sync_status = 2
-                                stopRepository.localUpdateStop(stop)
-                            } else {
-                                stopRepository.localUpdateStop(stop)
-                            }
-                        }
-                        //Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        stop.sync_status = 2
+                        localUpdateStop(stop)
                     }
 
                     override fun onResponse(
@@ -119,29 +116,23 @@ class ConfirmViewModel (
                         response: Response<SimpleResponse>
                     ) {
                         if (response.isSuccessful) {
-                            viewModelScope.launch() {
-                                stopRepository.localUpdateStop(stop)
-                            }
+                            localUpdateStop(stop)
                         }
                     }
-
                 })
-            } else {
-                viewModelScope.launch() {
-                    if (stop.idRemote > 0) {
-                        stop.sync_status = 2
-                        stopRepository.localUpdateStop(stop)
-                    } else {
-                        stopRepository.localUpdateStop(stop)
-                    }
-                }
             }
-        //}
+        } else {
+            //Toast.makeText(getApplication(), stop.toString(), Toast.LENGTH_LONG).show()
+            if(stop.idRemote > 0) {
+                stop.sync_status = 2
+            }
+            localUpdateStop(stop)
+        }
     }
 
     fun checkNetworkConnection(): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
+        return networkInfo != null && networkInfo.isConnectedOrConnecting
     }
 }

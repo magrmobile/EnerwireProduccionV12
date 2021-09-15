@@ -95,9 +95,9 @@ interface AppApiService {
     ): Call<SimpleResponse>
 
     companion object {
-        //private const val BASE_URL = "http://134.122.113.150/api/"    // Digital Ocean Server
+        private const val BASE_URL = "http://134.122.113.150/api/"    // Digital Ocean Server
         //private const val BASE_URL = "http://172.16.0.206/api/"         // Raspberry Local
-        private const val BASE_URL = "http://192.168.50.8/api/"         // Server Local
+        //private const val BASE_URL = "http://192.168.50.8/api/"         // Server Local
 
         operator fun invoke(
             connectivityInterceptor: ConnectivityInterceptor,

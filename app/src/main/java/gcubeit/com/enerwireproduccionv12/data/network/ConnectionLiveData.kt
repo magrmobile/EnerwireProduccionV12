@@ -8,9 +8,10 @@ import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.net.NetworkRequest
 import android.util.Log
 import androidx.lifecycle.LiveData
+import timber.log.Timber
 
 class ConnectionLiveData(context: Context): LiveData<Boolean>() {
-    private val TAG = "C-Manager"
+    //private val TAG = "C-Manager"
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
     private val cm = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
     private val validNetworks: MutableSet<Network> = HashSet()
@@ -33,10 +34,10 @@ class ConnectionLiveData(context: Context): LiveData<Boolean>() {
 
     private fun createNetworkCallback() = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
-            Log.d(TAG, "onAvailable: ${network}")
+            Timber.d( "onAvailable: ${network}")
             val networkCapabilities = cm.getNetworkCapabilities(network)
             val isInternet = networkCapabilities?.hasCapability(NET_CAPABILITY_INTERNET)
-            Log.d(TAG, "onAvailable: ${network}, $isInternet")
+            Timber.d( "onAvailable: ${network}, $isInternet")
             if(isInternet == true) {
                 validNetworks.add(network)
             }
@@ -44,7 +45,7 @@ class ConnectionLiveData(context: Context): LiveData<Boolean>() {
         }
 
         override fun onLost(network: Network) {
-            Log.d(TAG, "onLost: ${network}")
+            Timber.d( "onLost: ${network}")
             validNetworks.remove(network)
             checkValidNetworks()
         }

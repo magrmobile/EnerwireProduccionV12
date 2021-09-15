@@ -1,8 +1,6 @@
 package gcubeit.com.enerwireproduccionv12.ui.confirm
 
 import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,22 +8,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import gcubeit.com.enerwireproduccionv12.NavAppDirections
-import gcubeit.com.enerwireproduccionv12.data.Resource
 import gcubeit.com.enerwireproduccionv12.data.database.UserPreferences
 import gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop
-import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptor
+import gcubeit.com.enerwireproduccionv12.data.network.ConnectionLiveData
 import gcubeit.com.enerwireproduccionv12.data.network.ConnectivityInterceptorImpl
 import gcubeit.com.enerwireproduccionv12.databinding.ConfirmFragmentBinding
-import gcubeit.com.enerwireproduccionv12.databinding.StopsFragmentBinding
-import gcubeit.com.enerwireproduccionv12.ui.stops.StopsFragment
-import gcubeit.com.enerwireproduccionv12.ui.stops.StopsViewModel
-import gcubeit.com.enerwireproduccionv12.util.handleApiError
 import gcubeit.com.enerwireproduccionv12.util.visible
 import kotlinx.coroutines.*
 import org.kodein.di.KodeinAware
@@ -55,8 +45,12 @@ class ConfirmFragment : Fragment(), CoroutineScope, KodeinAware {
 
     private lateinit var viewModel: ConfirmViewModel
 
+    lateinit var connectionLiveData: ConnectionLiveData
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        connectionLiveData = ConnectionLiveData(application.applicationContext)
+        //connectionLiveData = ConnectivityOnlineLiveData(application)
         job = SupervisorJob()
     }
 
@@ -178,7 +172,6 @@ class ConfirmFragment : Fragment(), CoroutineScope, KodeinAware {
     private fun updateStop(stop: DbStop) {
         viewModel.updateStop(stop)
         Toast.makeText(requireContext(), "Paro Actualizado Satisfactoriamente", Toast.LENGTH_LONG).show()
-
         val action = ConfirmFragmentDirections.actionConfirmFragmentToStopsFragment(args.machineId, args.processId, args.title)
         findNavController().navigate(action)
         //Toast.makeText(requireContext(), stop.toString(), Toast.LENGTH_LONG).show()

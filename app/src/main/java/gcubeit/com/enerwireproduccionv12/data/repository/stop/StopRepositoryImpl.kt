@@ -63,7 +63,7 @@ class StopRepositoryImpl(
 
     suspend fun localAddStop(stop: DbStop) {
         return withContext(Dispatchers.IO) {
-            return@withContext dbStopDao.insert(stop)
+            return@withContext dbStopDao.insertStop(stop)
         }
     }
 
