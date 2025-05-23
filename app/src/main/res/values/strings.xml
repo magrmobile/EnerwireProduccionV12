@@ -125,6 +125,8 @@
     <string name="database_name">enerwire.db</string>
     <string name="fab_content_description">fab content description</string>
     <string name="todo">TODO</string>
+    <string name="calc_error">No se puede encontrar la calculadora</string>
+    <string name="ErrorConnectionMessage">No hay conexion</string>
 
     <string-array name="animes">
         <item>Black Jack</item>

@@ -7,11 +7,14 @@
     <!-- Stops Fragment -->
     <fragment
         android:id="@+id/stopsFragment"
-        android:name="gcubeit.com.enerwireproduccionv12.ui.stops.StopsFragment"
+        android:name="gcubeit.com.enerwireproduccionv13.ui.stops.StopsFragment"
         android:label="{title}"
         tools:layout="@layout/stops_fragment">
         <argument
             android:name="machineId"
+            app:argType="integer" />
+        <argument
+            android:name="operatorId"
             app:argType="integer" />
         <argument
             android:name="processId"
@@ -37,7 +40,7 @@
     <!-- Create Fragment -->
     <fragment
         android:id="@+id/createFragment"
-        android:name="gcubeit.com.enerwireproduccionv12.ui.create.CreateFragment"
+        android:name="gcubeit.com.enerwireproduccionv13.ui.create.CreateFragment"
         android:label="{title}"
         tools:layout="@layout/create_fragment" >
         <action
@@ -61,14 +64,14 @@
             app:argType="string" />
         <!--<argument
             android:name="dbStop"
-            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop"
+            app:argType="enerwireproduccionv13.data.database.entity.DbStop"
             app:nullable="true"
             android:defaultValue="@null"/>-->
     </fragment>
     <!-- Edit Fragment -->
     <fragment
         android:id="@+id/editFragment"
-        android:name="gcubeit.com.enerwireproduccionv12.ui.edit.EditFragment"
+        android:name="gcubeit.com.enerwireproduccionv13.ui.edit.EditFragment"
         android:label="{title}"
         tools:layout="@layout/edit_fragment" >
         <action
@@ -80,7 +83,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="currentStop"
-            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop" />
+            app:argType="gcubeit.com.enerwireproduccionv13.data.database.entity.DbStop" />
         <argument
             android:name="machineId"
             app:argType="integer" />
@@ -98,12 +101,12 @@
             app:argType="string" />
         <!--<argument
             android:name="dbStop"
-            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop" />-->
+            app:argType="enerwireproduccionv13.data.database.entity.DbStop" />-->
     </fragment>
     <!-- Confirm Fragment -->
     <fragment
         android:id="@+id/confirmFragment"
-        android:name="gcubeit.com.enerwireproduccionv12.ui.confirm.ConfirmFragment"
+        android:name="gcubeit.com.enerwireproduccionv13.ui.confirm.ConfirmFragment"
         android:label="{title}"
         tools:layout="@layout/confirm_fragment">
         <action
@@ -117,10 +120,10 @@
             app:popUpToInclusive="true" />
         <argument
             android:name="stopConfirm"
-            app:argType="gcubeit.com.enerwireproduccionv12.data.database.views.StopConfirm" />
+            app:argType="gcubeit.com.enerwireproduccionv13.data.database.views.StopConfirm" />
         <argument
             android:name="dbStop"
-            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop" />
+            app:argType="gcubeit.com.enerwireproduccionv13.data.database.entity.DbStop" />
         <argument
             android:name="machineId"
             app:argType="integer"/>
@@ -140,7 +143,7 @@
     <!-- Dashboard Fragment -->
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="gcubeit.com.enerwireproduccionv12.ui.dashboard.DashboardFragment"
+        android:name="gcubeit.com.enerwireproduccionv13.ui.dashboard.DashboardFragment"
         android:label="Dashboard"
         tools:layout="@layout/dashboard_fragment">
     </fragment>
@@ -157,6 +160,9 @@
         app:popUpToInclusive="true">
         <argument
             android:name="machineId"
+            app:argType="integer" />
+        <argument
+            android:name="operatorId"
             app:argType="integer" />
         <argument
             android:name="processId"
@@ -179,9 +185,6 @@
             android:name="machineId"
             app:argType="integer" />
         <argument
-            android:name="operatorId"
-            app:argType="integer" />
-        <argument
             android:name="processId"
             app:argType="integer" />
         <argument
@@ -189,7 +192,7 @@
             app:argType="string" />
         <!--<argument
             android:name="dbStop"
-            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop" />-->
+            app:argType="enerwireproduccionv13.data.database.entity.DbStop" />-->
     </action>
 
     <action
@@ -204,12 +207,9 @@
         app:popUpToInclusive="true">
         <argument
             android:name="currentStop"
-            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop" />
+            app:argType="gcubeit.com.enerwireproduccionv13.data.database.entity.DbStop" />
         <argument
             android:name="machineId"
-            app:argType="integer" />
-        <argument
-            android:name="operatorId"
             app:argType="integer" />
         <argument
             android:name="processId"
@@ -222,6 +222,6 @@
             app:argType="string" />
         <!--<argument
             android:name="dbStop"
-            app:argType="gcubeit.com.enerwireproduccionv12.data.database.entity.DbStop" />-->
+            app:argType="enerwireproduccionv13.data.database.entity.DbStop" />-->
     </action>
 </navigation>

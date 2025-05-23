@@ -7,9 +7,9 @@
         android:title="Calculator"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/tb_homeFragment"
-        android:icon="@drawable/ic_home"
-        android:title="Home"
+        android:id="@+id/tb_Sync"
+        android:icon="@drawable/ic_sync_failed"
+        android:title="Sync"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/tb_logout"

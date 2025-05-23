@@ -8,83 +8,99 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark">
+
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TableRow tools:ignore="UselessParent">
-                <TextView
-                    android:id="@+id/tvGridActionsH"
-                    android:text="@string/grid_actions_column"
-                    style="@style/grid_header_actions" />
-                <TextView
-                    android:id="@+id/tvGridDateH"
-                    android:text="@string/grid_date_column"
-                    style="@style/grid_header"
-                    android:layout_width="125dp"/>
-                <TextView
-                    android:id="@+id/tvGridScheduleH"
-                    android:text="@string/grid_schedule_column"
-                    style="@style/grid_header"
-                    android:layout_width="80dp"/>
-                <TextView
-                    android:id="@+id/tvGridOperatorH"
-                    android:text="@string/grid_operator_column"
-                    style="@style/grid_header"
-                    android:layout_width="200dp"/>
-                <TextView
-                    android:id="@+id/tvGridStartStopH"
-                    android:text="@string/grid_start_stop_column"
-                    style="@style/grid_header"
-                    android:layout_width="100dp"/>
-                <TextView
-                    android:id="@+id/tvGridEndStopH"
-                    android:text="@string/grid_end_stop_column"
-                    style="@style/grid_header"
-                    android:layout_width="100dp"/>
-                <TextView
-                    android:id="@+id/tvGridProductH"
-                    android:text="@string/grid_product_column"
-                    style="@style/grid_header"
-                    android:layout_width="200dp"/>
-                <TextView
-                    android:id="@+id/tvGridCodeH"
-                    android:text="@string/grid_code_column"
-                    style="@style/grid_header"
-                    android:layout_width="200dp"/>
-                <TextView
-                    android:id="@+id/tvGridPackingH"
-                    android:text="@string/grid_packing_column"
-                    style="@style/grid_header"
-                    android:layout_width="200dp"/>
-                <TextView
-                    android:id="@+id/tvGridQuantityH"
-                    android:text="@string/grid_quantity_column"
-                    style="@style/grid_header"
-                    android:layout_width="100dp"/>
-                <TextView
-                    android:id="@+id/tvGridMetersH"
-                    android:text="@string/grid_meters_column"
-                    style="@style/grid_header"
-                    android:layout_width="200dp"/>
-                <TextView
-                    android:id="@+id/tvGridCommentH"
-                    android:text="@string/grid_comment_column"
-                    style="@style/grid_header"
-                    android:layout_width="250dp"/>
-            </TableRow>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvStopsGrid"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:scrollbars="horizontal"
-                android:orientation="horizontal"
-                tools:listitem="@layout/stop_row"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-        </TableLayout>
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TableRow tools:ignore="UselessParent">
+
+                    <TextView
+                        android:id="@+id/tvGridActionsH"
+                        style="@style/grid_header_actions"
+                        android:text="@string/grid_actions_column" />
+
+                    <TextView
+                        android:id="@+id/tvGridDateH"
+                        style="@style/grid_header"
+                        android:layout_width="125dp"
+                        android:text="@string/grid_date_column" />
+
+                    <TextView
+                        android:id="@+id/tvGridScheduleH"
+                        style="@style/grid_header"
+                        android:layout_width="80dp"
+                        android:text="@string/grid_schedule_column" />
+
+                    <TextView
+                        android:id="@+id/tvGridOperatorH"
+                        style="@style/grid_header"
+                        android:layout_width="200dp"
+                        android:text="@string/grid_operator_column" />
+
+                    <TextView
+                        android:id="@+id/tvGridStartStopH"
+                        style="@style/grid_header"
+                        android:layout_width="100dp"
+                        android:text="@string/grid_start_stop_column" />
+
+                    <TextView
+                        android:id="@+id/tvGridEndStopH"
+                        style="@style/grid_header"
+                        android:layout_width="100dp"
+                        android:text="@string/grid_end_stop_column" />
+
+                    <TextView
+                        android:id="@+id/tvGridProductH"
+                        style="@style/grid_header"
+                        android:layout_width="200dp"
+                        android:text="@string/grid_product_column" />
+
+                    <TextView
+                        android:id="@+id/tvGridCodeH"
+                        style="@style/grid_header"
+                        android:layout_width="200dp"
+                        android:text="@string/grid_code_column" />
+
+                    <TextView
+                        android:id="@+id/tvGridPackingH"
+                        style="@style/grid_header"
+                        android:layout_width="200dp"
+                        android:text="@string/grid_packing_column" />
+
+                    <TextView
+                        android:id="@+id/tvGridQuantityH"
+                        style="@style/grid_header"
+                        android:layout_width="100dp"
+                        android:text="@string/grid_quantity_column" />
+
+                    <TextView
+                        android:id="@+id/tvGridMetersH"
+                        style="@style/grid_header"
+                        android:layout_width="200dp"
+                        android:text="@string/grid_meters_column" />
+
+                    <TextView
+                        android:id="@+id/tvGridCommentH"
+                        style="@style/grid_header"
+                        android:layout_width="250dp"
+                        android:text="@string/grid_comment_column" />
+                </TableRow>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvStopsGrid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:scrollbars="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/stop_row" />
+            </TableLayout>
         </HorizontalScrollView>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
